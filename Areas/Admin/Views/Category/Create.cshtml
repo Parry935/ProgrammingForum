@@ -1,0 +1,39 @@
+﻿@model Forum.Models.Category
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="top-container">
+    <h2>Category</h2>
+    <a asp-controller="Category" asp-action="Index" class="btn-back">Back to list</a>
+</div>
+<div style="border-top: 2px groove #ffffff"></div>
+
+<div class="my-container">
+    <form method="post" enctype="multipart/form-data" asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form_div">
+            <div class="form_item">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" placeholder="Name" class="form-control" />
+                <span asp-validation-for="Name" style="color: #FFA7A7; font-size:17px"></span>
+            </div>
+            <div class="form_item">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" placeholder="Description" class="form-control"></textarea>
+            </div>
+            <div class="form_item">
+                <label asp-for="Image"></label><br />
+                <input type="file" name="files" class="btn-yel"/>
+            </div>
+        </div>
+        <input type="submit" value="Submit" class="btn-create" />
+    </form>
+</div>
+
+
+@section Scripts{
+
+    <partial name="_ValidationScriptsPartial" />
+}
+

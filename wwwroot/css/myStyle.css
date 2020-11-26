@@ -1,0 +1,94 @@
+﻿#index-container {
+    width: 66%;
+    margin: auto;
+    background-color: dimgrey;
+    opacity: 0.75;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#img-back {
+    background-image: url(../img/background/backgroundIndex.jpeg);
+}
+
+.my-container {
+    margin: 10px;
+    padding: 3px;
+    display: block;
+}
+
+.top-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+}
+
+.btn-create {
+    background-color: green;
+    border-radius: 10px;
+    border: 2px solid white;
+    color: white;
+    padding: 9px 22px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+    .btn-create:hover {
+        background-color: white;
+        color: green;
+        border: 2px solid green;
+        text-decoration: none;
+    }
+
+
+.btn-back {
+    background-color: cornflowerblue;
+    border-radius: 10px;
+    border: 2px solid white;
+    color: white;
+    padding: 9px 22px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+    .btn-back:hover {
+        background-color: white;
+        color: cornflowerblue;
+        border: 2px solid green;
+        text-decoration: none;
+    }
+
+
+.form_div {
+    width: 40%;
+    margin-bottom: 40px;
+}
+
+.form_item { 
+    margin-bottom: 20px;
+    color:lightgreen;
+    font-size:23px;
+    font-family: Arial;
+}
+
+
+.btn-yel {
+    background-color: #F0F263;
+    border-radius: 10px;
+    border: 2px solid white;
+    color: black;
+    padding: 9px 22px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+    .btn-yel:hover {
+        background-color: black;
+        color: #F0F263;
+        border: 2px solid green;
+        text-decoration: none;
+    }
