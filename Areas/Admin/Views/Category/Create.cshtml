@@ -9,10 +9,9 @@
 </div>
 <div style="border-top: 2px groove #ffffff"></div>
 
-<div class="my-container">
+<div class="my-flex-container">
     <form method="post" enctype="multipart/form-data" asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form_div">
             <div class="form_item">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" placeholder="Name" class="form-control" />
@@ -20,14 +19,13 @@
             </div>
             <div class="form_item">
                 <label asp-for="Description"></label>
-                <textarea asp-for="Description" placeholder="Description" class="form-control"></textarea>
+                <textarea asp-for="Description" placeholder="Description" class="form-control" style="height:100px"></textarea>
             </div>
             <div class="form_item">
                 <label asp-for="Image"></label><br />
                 <input type="file" name="files" class="btn-yel"/>
             </div>
-        </div>
-        <input type="submit" value="Submit" class="btn-create" />
+        <input type="submit" value="Submit" class="btn-create" style="margin-top:30px;"/>
     </form>
 </div>
 

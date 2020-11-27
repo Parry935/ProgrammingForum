@@ -13,14 +13,13 @@
 <div style="border-top: 2px groove #ffffff"></div>
 @if (Model.Count() > 0)
 {
-    <div class="my-container">
-        <table>
+        <table class="table table-dark">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Image</th>
                     <th>Description</th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,19 +27,16 @@
                 {
                 <tr>
                     <td>@Html.DisplayFor(m => item.Name)</td>
-                    <td>@Html.DisplayFor(m => item.Image)</td>
+                    <td><img src="@item.Image" style="width:40%; margin:auto; display:block; border-radius:15px;" /></td>
                     <td>@Html.DisplayFor(m => item.Description)</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-red">Edit</a>
-                    </td>
-                    <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-red">Delete</a>
+                    <td style="display:flex">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-create"><i class="far fa-edit"></i></a>  
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-del"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
                 }
             </tbody>
         </table>
-    </div>
 }
 
 else

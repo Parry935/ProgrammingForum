@@ -9,10 +9,13 @@
 </div>
 <div style="border-top: 2px groove #ffffff"></div>
 
-<div class="my-container">
-    <form method="post" enctype="multipart/form-data" asp-action="Create">
+    <form method="post" enctype="multipart/form-data" asp-action="Edit" class="my-flex-container">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form_div">
+        <input type="hidden" asp-for="Id" />
+        <div>
+            <img src="@Model.Image" style="width:200px;height:auto; border-radius:15px;"/>
+        </div>
+        <div>
             <div class="form_item">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" placeholder="Name" class="form-control" />
@@ -20,16 +23,15 @@
             </div>
             <div class="form_item">
                 <label asp-for="Description"></label>
-                <textarea asp-for="Description" placeholder="Description" class="form-control"></textarea>
+                <textarea asp-for="Description" placeholder="Description" class="form-control" style="height:100px"></textarea>
             </div>
             <div class="form_item">
                 <label asp-for="Image"></label><br />
                 <input type="file" name="files" class="btn-yel" />
             </div>
+            <input type="submit" value="Submit" class="btn-create" />
         </div>
-        <input type="submit" value="Submit" class="btn-create" />
     </form>
-</div>
 
 
 @section Scripts{

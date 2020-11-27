@@ -1,7 +1,7 @@
 ﻿#index-container {
     width: 66%;
     margin: auto;
-    background-color: dimgrey;
+    background-color: #3A3745;
     opacity: 0.75;
     color: white;
     border-radius: 5px;
@@ -12,10 +12,11 @@
     background-image: url(../img/background/backgroundIndex.jpeg);
 }
 
-.my-container {
-    margin: 10px;
-    padding: 3px;
-    display: block;
+.my-flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .top-container {
@@ -57,21 +58,17 @@
     .btn-back:hover {
         background-color: white;
         color: cornflowerblue;
-        border: 2px solid green;
+        border: 2px solid cornflowerblue;
         text-decoration: none;
     }
 
-
-.form_div {
-    width: 40%;
-    margin-bottom: 40px;
-}
 
 .form_item { 
     margin-bottom: 20px;
     color:lightgreen;
     font-size:23px;
     font-family: Arial;
+    width: 330px;
 }
 
 
@@ -89,12 +86,12 @@
     .btn-yel:hover {
         background-color: black;
         color: #F0F263;
-        border: 2px solid green;
+        border: 2px solid #F0F263;
         text-decoration: none;
     }
 
 
-.btn-red {
+.btn-del {
     background-color: #C14B5F;
     border-radius: 10px;
     border: 2px solid white;
@@ -105,9 +102,10 @@
     font-size: 15px;
 }
 
-    .btn-red:hover {
-        background-color: #C14B5F;
-        color: green;
-        border: 2px solid green;
+    .btn-del:hover {
+        background-color: white;
+        color: #C14B5F;
+        border: 2px solid #C14B5F;
         text-decoration: none;
     }
+

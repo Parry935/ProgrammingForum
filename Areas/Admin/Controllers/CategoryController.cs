@@ -30,12 +30,14 @@ namespace Forum.Areas.Admin.Controllers
             return View(categories);
         }
 
+        //GET - Create
         public IActionResult Create()
         {
             return View();
         }
 
 
+        //POST - Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category)
@@ -78,6 +80,7 @@ namespace Forum.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //GET - Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,10 +95,58 @@ namespace Forum.Areas.Admin.Controllers
         }
 
 
+        //POST - Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ActionName("Edit")]
-        public async Task<IActionResult> EditPost(int? id)
+        public async Task<IActionResult> Edit(Category category)
+        {
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(category);
+            }
+
+            string webRootPath = _env.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+
+
+            var categoryFromDB = await _db.Category.FindAsync(category.Id);
+
+            if (files.Count > 0)
+            {
+                var uploads = Path.Combine(webRootPath, "img");
+                var extension_new = Path.GetExtension(files[0].FileName);
+
+                var imgToDel = Path.Combine(webRootPath, categoryFromDB.Image.TrimStart('\\'));
+
+                if (System.IO.File.Exists(imgToDel))
+                {
+                    System.IO.File.Delete(imgToDel);
+                }
+
+                using (var flieStream = new FileStream(Path.Combine(uploads, category.Id + extension_new), FileMode.Create))
+                {
+                    files[0].CopyTo(flieStream);
+                }
+
+                categoryFromDB.Image = @"\img\" + category.Id + extension_new;
+            }
+
+            categoryFromDB.Name = category.Name;
+            categoryFromDB.Description = category.Description;
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        //GET - Delete
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
                 return NotFound();
@@ -109,6 +160,33 @@ namespace Forum.Areas.Admin.Controllers
         }
 
 
+        //POST - Delete
+        [HttpPost,ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirm(int? id)
+        {
+            if (id == null)
+                return NotFound();
 
+            var categoryFromDB = await _db.Category.FindAsync(id);
+
+            if (categoryFromDB == null)
+                return NotFound();
+
+            string webRootPath = _env.WebRootPath;
+
+            var imgToDel = Path.Combine(webRootPath, categoryFromDB.Image.TrimStart('\\'));
+
+            if (System.IO.File.Exists(imgToDel))
+            {
+                System.IO.File.Delete(imgToDel);
+            }
+
+            _db.Category.Remove(categoryFromDB);
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
