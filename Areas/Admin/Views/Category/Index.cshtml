@@ -7,7 +7,7 @@
 
 
 <div class="top-container">
-    <h2 >Category</h2>
+    <h2>Categories</h2>
     <a asp-controller="Category" asp-action="Create" class="btn-create">Create new category</a>
 </div>
 <div style="border-top: 2px groove #ffffff"></div>
@@ -26,12 +26,17 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(m=>item.Name)</td>
-                        <td>@Html.DisplayFor(m => item.Image)</td>
-                        <td>@Html.DisplayFor(m => item.Description)</td>
-                        <td>btn</td>
-                    </tr>
+                <tr>
+                    <td>@Html.DisplayFor(m => item.Name)</td>
+                    <td>@Html.DisplayFor(m => item.Image)</td>
+                    <td>@Html.DisplayFor(m => item.Description)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-red">Edit</a>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-red">Delete</a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

@@ -78,5 +78,37 @@ namespace Forum.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var categoryFromDB = await _db.Category.FindAsync(id);
+
+            if (categoryFromDB == null)
+                return NotFound();
+
+            return View(categoryFromDB);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Edit")]
+        public async Task<IActionResult> EditPost(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var categoryFromDB = await _db.Category.FindAsync(id);
+
+            if (categoryFromDB == null)
+                return NotFound();
+
+            return View(categoryFromDB);
+        }
+
+
+
     }
 }

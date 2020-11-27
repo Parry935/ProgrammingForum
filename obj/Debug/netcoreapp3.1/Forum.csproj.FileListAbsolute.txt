@@ -467,3 +467,4 @@ C:\Users\domin\source\repos\Forum\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\P
 C:\Users\domin\source\repos\Forum\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewImports.cshtml.g.cs
 C:\Users\domin\source\repos\Forum\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Category\Index.cshtml.g.cs
 C:\Users\domin\source\repos\Forum\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Category\Create.cshtml.g.cs
+C:\Users\domin\source\repos\Forum\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Category\Edit.cshtml.g.cs

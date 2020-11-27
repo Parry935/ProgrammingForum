@@ -1,10 +1,10 @@
 ﻿@model Forum.Models.Category
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
 <div class="top-container">
-    <h2>Create category</h2>
+    <h2>Edit category</h2>
     <a asp-controller="Category" asp-action="Index" class="btn-back">Back to list</a>
 </div>
 <div style="border-top: 2px groove #ffffff"></div>
@@ -24,7 +24,7 @@
             </div>
             <div class="form_item">
                 <label asp-for="Image"></label><br />
-                <input type="file" name="files" class="btn-yel"/>
+                <input type="file" name="files" class="btn-yel" />
             </div>
         </div>
         <input type="submit" value="Submit" class="btn-create" />
