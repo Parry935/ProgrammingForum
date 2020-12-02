@@ -1,0 +1,37 @@
+﻿@model Forum.ViewModel.TopicVM
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="top-container">
+    <h2>@Model.Category.Name</h2>
+    <img src="@Model.Category.Image" style="width:3vw; display:block; border-radius:15px;" />
+    <a asp-controller="Topic" asp-action="Create" asp-area="CustomUser" asp-route-id="@Model.Category.Id" class="btn-create">Create new topic</a>
+</div>
+<div style="border-top: 2px groove #ffffff"></div>
+
+@if (Model.Topics.Count() > 0)
+{
+    <table class="table table-dark">
+        <tbody>
+            @foreach (var item in Model.Topics)
+            {
+            <tr>
+                <td style="width: 8vw; text-align: center; "><i class="fas fa-comments" style="font-size: 10vh"></i></td>
+                <td>
+                    <a asp-action="TopicDetails" asp-controller="Topic" asp-area="CustomUser" asp-route-id="@item.Id" style="font-size:22px; color:#B9F98A">@Html.DisplayFor(m => item.TopicTittle)</a><br />
+                    @Html.DisplayFor(m => item.TopicDate)<span>@Html.DisplayFor(m => item.User.Nick)</span>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+else
+{
+    <div class="my-container">
+        Brak wątków :/
+    </div>
+}
+

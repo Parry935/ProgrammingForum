@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Forum.Models;
+using Forum.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Forum.Controllers
 {
@@ -13,9 +15,19 @@ namespace Forum.Controllers
     [Area("CustomUser")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+
+        private readonly ApplicationDbContext _db;
+
+        public HomeController(ApplicationDbContext db)
         {
-            return View();
+            _db = db;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var categories = await _db.Category.ToArrayAsync();
+
+            return View(categories);
         }
 
 

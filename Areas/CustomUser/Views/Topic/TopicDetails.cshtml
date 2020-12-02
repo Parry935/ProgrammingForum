@@ -1,0 +1,98 @@
+﻿@model Forum.ViewModel.CreatePostVM
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="top-container">
+    <h2>@Model.Posts.FirstOrDefault().Topic.TopicTittle</h2>
+    <img src="@Model.Posts.FirstOrDefault().Topic.Category.Image" style="width:3vw; display:block; border-radius:15px;" />
+    <a asp-controller="Topic" asp-action="Index" asp-area="CustomUser" asp-route-id="@Model.Posts.FirstOrDefault().CategoryId" class="btn-back">Back to topics</a>
+</div>
+<div style="border-top: 2px groove #ffffff"></div>
+
+@if (Model.Posts.Count() > 0)
+{
+    <table class="table table-dark">
+        <tbody>
+            @foreach (var item in Model.Posts)
+            {
+                if (Model.Posts.First() == item)
+                {
+                    <tr style="border-bottom: 7px solid #E4FED2;">
+                        <td style="width: 8vw; text-align: center; padding-bottom: 25px;">
+                            <img src="~/img/defaul_user.jpg" style="width:5vw; display:block; border-radius:15px; margin:auto" />
+                            <br />
+                            @Html.DisplayFor(m => item.PostDate)
+                            <br />
+                            @Html.DisplayFor(m => item.User.Nick)
+                        </td>
+                        <td style="padding-bottom: 25px;">
+                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:200px"></textarea>
+                        </td>
+                    </tr>
+
+
+                }
+                else
+                {
+                    <tr>
+                        <td style="width: 8vw; text-align: center;">
+                            <img src="~/img/defaul_user.jpg" style="width:5vw; display:block; border-radius:15px; margin:auto" />
+                            <br />
+                            @Html.DisplayFor(m => item.PostDate)
+                            <br />
+                            @Html.DisplayFor(m => item.User.Nick)
+                        </td>
+                        <td>
+                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:200px"></textarea>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    if (User.Identity.IsAuthenticated)
+    {
+    <div id="add-post-btn">
+        <div class="my-flex-container">
+            <form method="post" asp-action="Create" asp-controller="Post" asp-area="CustomUser">
+                <input type="hidden" asp-for="NewPost.TopicId"/>
+                <input type="hidden" asp-for="NewPost.CategoryId"/>
+                <div class="form_item" style="width:60vw;">
+                    <label asp-for="NewPost.PostMessage"></label>
+                    <textarea asp-for="NewPost.PostMessage" placeholder="Content" class="form-control" style="height:200px"></textarea>
+                    <span asp-validation-for="NewPost.PostMessage" style="color: #FFA7A7; font-size:17px"></span>
+                </div>
+                <input type="submit" value="Post answer" class="btn-create" style="margin-top:20px;" />
+            </form>
+        </div>
+        <button class="btn-yel">Add your answer</button>
+    </div>
+    }
+}
+
+else
+{
+    <div class="my-container">
+        Brak wątków :/
+    </div>
+}
+
+
+@section Scripts{
+
+    <partial name="_ValidationScriptsPartial" />
+    
+
+    <script>
+        $(document).ready(function () {
+            $("#add-post-btn .my-flex-container").hide();
+            $("#add-post-btn button").click(function () {
+                $("#add-post-btn button").hide();
+                $("#add-post-btn .my-flex-container").slideDown();
+            });
+        });
+    </script>    
+
+}
+

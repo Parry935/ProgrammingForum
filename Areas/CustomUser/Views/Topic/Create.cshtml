@@ -1,0 +1,38 @@
+﻿@model Forum.ViewModel.CreateTopicVM
+@{
+    ViewData["Title"] = "Create";
+}
+
+    <div class="top-container">
+        <div style="display:flex; align-items:center;">
+            <h2 style="display:inline-block; margin-bottom:0px;">Create topic for @Model.Topic.Category.Name</h2>
+            <img src="@Model.Topic.Category.Image" style="width:2.5vw; display:block; border-radius:15px;display:inline-block; margin-left:5px;" />
+        </div>
+        <a asp-controller="Topic" asp-action="Index" asp-route-id="@Model.Topic.CategoryId" class="btn-back">Back to topics</a>
+    </div>
+<div style="border-top: 2px groove #ffffff"></div>
+
+<div class="my-flex-container">
+    <form method="post" asp-action="Create">
+        <input type="hidden" asp-for="Topic.CategoryId" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form_item" style="width:60vw;">
+            <label asp-for="Topic.TopicTittle"></label>
+            <input asp-for="Topic.TopicTittle" placeholder="Topic Tittle" class="form-control" />
+            <span asp-validation-for="Topic.TopicTittle" style="color: #FFA7A7; font-size:17px"></span>
+        </div>
+        <div class="form_item" style="width:60vw;">
+            <label asp-for="Post.PostMessage"></label>
+            <textarea asp-for="Post.PostMessage" placeholder="Content" class="form-control" style="height:200px"></textarea>
+            <span asp-validation-for="Post.PostMessage" style="color: #FFA7A7; font-size:17px"></span>
+        </div>
+        <input type="submit" value="Submit" class="btn-create" style="margin-top:30px;" />
+    </form>
+</div>
+
+
+@section Scripts{
+
+    <partial name="_ValidationScriptsPartial" />
+}
+

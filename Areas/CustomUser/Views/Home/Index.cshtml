@@ -1,8 +1,36 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Forum.Models.Category>
+@{
+    ViewData["Title"] = "Index";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+
+<div class="top-container">
+    <h2>Forums</h2>
 </div>
+<div style="border-top: 2px groove #ffffff"></div>
+@if (Model.Count() > 0)
+{
+    <table class="table table-dark">
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.Image" style="width:5vw; display:block; border-radius:15px;" /></td>
+                    <td>
+                        <a asp-action="Index" asp-controller="Topic" asp-area="CustomUser" asp-route-id="@item.Id" style="font-size:22px; color:#B9F98A">@Html.DisplayFor(m => item.Name)</a><br />
+                        @Html.DisplayFor(m => item.Description)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+else
+{
+    <div class="my-container">
+        Brak forum :/
+    </div>
+}
