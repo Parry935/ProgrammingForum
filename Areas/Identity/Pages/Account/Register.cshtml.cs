@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -9,6 +10,7 @@ using Forum.Models;
 using Forum.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,19 +28,22 @@ namespace Forum.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private IWebHostEnvironment _env;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _env = env;
         }
 
         [BindProperty]
@@ -83,11 +88,17 @@ namespace Forum.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                string webRootPath = _env.WebRootPath;
+                var uploads = Path.Combine(webRootPath, @"img\user_img\" + "default_user.png");
+                System.IO.File.Copy(uploads, webRootPath + @"\img\user_img\" + Input.Nick + ".png");
+                
+                var img = @"\img\user_img\" + Input.Nick + ".png";
+
                 var user = new User 
                 {
-                    UserName = Input.Email,
+                    UserName = Input.Nick,
                     Email = Input.Email,
-                    Nick = Input.Nick
+                    Image = img
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -103,7 +114,7 @@ namespace Forum.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(ForumRole.Admin));
                     }
 
-                    await _userManager.AddToRoleAsync(user, ForumRole.CustomUser);
+                    await _userManager.AddToRoleAsync(user, ForumRole.Admin);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
 

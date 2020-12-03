@@ -58,7 +58,7 @@ namespace Forum.Areas.Admin.Controllers
 
             if (files.Count > 0)
             {
-                var uploads = Path.Combine(webRootPath, "img");
+                var uploads = Path.Combine(webRootPath, @"img\category_img");
                 var extension = Path.GetExtension(files[0].FileName);
 
                 using (var flieStream = new FileStream(Path.Combine(uploads, category.Id + extension), FileMode.Create))
@@ -66,13 +66,13 @@ namespace Forum.Areas.Admin.Controllers
                     files[0].CopyTo(flieStream);
                 }
 
-                categoryFromDB.Image = @"\img\" + category.Id + extension;
+                categoryFromDB.Image = @"\img\category_img\" + category.Id + extension;
             }
             else
             {
-                var uploads = Path.Combine(webRootPath, @"img\" + "default_img_category");
-                System.IO.File.Copy(uploads, webRootPath + @"\img\" + category.Id + ".png");
-                categoryFromDB.Image = @"\img\" + category.Id + ".png";
+                var uploads = Path.Combine(webRootPath, @"img\category_img\" + "default_img_category");
+                System.IO.File.Copy(uploads, webRootPath + @"\img\category_img\" + category.Id + ".png");
+                categoryFromDB.Image = @"\img\category_img\" + category.Id + ".png";
             }
 
             await _db.SaveChangesAsync();
@@ -118,7 +118,7 @@ namespace Forum.Areas.Admin.Controllers
 
             if (files.Count > 0)
             {
-                var uploads = Path.Combine(webRootPath, "img");
+                var uploads = Path.Combine(webRootPath, @"img\category_img");
                 var extension_new = Path.GetExtension(files[0].FileName);
 
                 var imgToDel = Path.Combine(webRootPath, categoryFromDB.Image.TrimStart('\\'));
@@ -133,7 +133,7 @@ namespace Forum.Areas.Admin.Controllers
                     files[0].CopyTo(flieStream);
                 }
 
-                categoryFromDB.Image = @"\img\" + category.Id + extension_new;
+                categoryFromDB.Image = @"\img\category_img\" + category.Id + extension_new;
             }
 
             categoryFromDB.Name = category.Name;

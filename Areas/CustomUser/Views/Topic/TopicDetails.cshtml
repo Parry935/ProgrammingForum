@@ -1,4 +1,5 @@
 ﻿@model Forum.ViewModel.CreatePostVM
+@using Forum.Utility
 @{
     ViewData["Title"] = "Index";
 }
@@ -20,11 +21,16 @@
                 {
                     <tr style="border-bottom: 7px solid #E4FED2;">
                         <td style="width: 8vw; text-align: center; padding-bottom: 25px;">
-                            <img src="~/img/defaul_user.jpg" style="width:5vw; display:block; border-radius:15px; margin:auto" />
+                            <img src="@item.User.Image" style="width:5vw; display:block; border-radius:15px; margin:auto" />
                             <br />
                             @Html.DisplayFor(m => item.PostDate)
                             <br />
-                            @Html.DisplayFor(m => item.User.Nick)
+                            @Html.DisplayFor(m => item.User.UserName)<br />
+                            @if (item.User.UserName == "user")
+                            {
+                                <span style="background:yellow; color:black; padding:2px; font-size:12px; border-radius: 2px;">@ForumRole.Admin</span>
+                            }
+
                         </td>
                         <td style="padding-bottom: 25px;">
                             <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:200px"></textarea>
@@ -37,11 +43,15 @@
                 {
                     <tr>
                         <td style="width: 8vw; text-align: center;">
-                            <img src="~/img/defaul_user.jpg" style="width:5vw; display:block; border-radius:15px; margin:auto" />
+                            <img src="@item.User.Image" style="width:5vw; display:block; border-radius:15px; margin:auto" />
                             <br />
                             @Html.DisplayFor(m => item.PostDate)
                             <br />
-                            @Html.DisplayFor(m => item.User.Nick)
+                            @Html.DisplayFor(m => item.User.UserName)<br />
+                            @if (item.User.UserName == "user")
+                            {
+                                 <span style="background:yellow; color:black; padding:2px; font-size:12px; border-radius: 2px;">@ForumRole.Admin</span>
+                            }
                         </td>
                         <td>
                             <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:200px"></textarea>

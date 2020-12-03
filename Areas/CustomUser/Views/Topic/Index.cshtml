@@ -20,7 +20,7 @@
                 <td style="width: 8vw; text-align: center; "><i class="fas fa-comments" style="font-size: 10vh"></i></td>
                 <td>
                     <a asp-action="TopicDetails" asp-controller="Topic" asp-area="CustomUser" asp-route-id="@item.Id" style="font-size:22px; color:#B9F98A">@Html.DisplayFor(m => item.TopicTittle)</a><br />
-                    @Html.DisplayFor(m => item.TopicDate)<span>@Html.DisplayFor(m => item.User.Nick)</span>
+                    @Html.DisplayFor(m => item.TopicDate)<span>@Html.DisplayFor(m => item.User.UserName)</span>
                 </td>
             </tr>
             }

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Forum.Data;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,13 +17,19 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationDbContext _db;
+        private IWebHostEnvironment _env;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext db,
+            IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _db = db;
+            _env = env;
         }
 
         public string Username { get; set; }
@@ -32,21 +42,25 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            public string Email { get; set; }
+            public string Image { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
 
-            Input = new InputModel
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var userFromDb = _db.User.SingleOrDefault(m => m.Id == claim.Value);
+
+            Input = new InputModel()
             {
-                PhoneNumber = phoneNumber
+                Email = userFromDb.Email,
+                Image = userFromDb.Image
             };
         }
 
@@ -76,15 +90,34 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var userFromDb = _db.User.SingleOrDefault(m => m.Id == claim.Value);
+
+            string webRootPath = _env.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+
+            if (files.Count > 0)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                var uploads = Path.Combine(webRootPath, @"img\user_img");
+                var extension_new = Path.GetExtension(files[0].FileName);
+
+                var imgToDel = Path.Combine(webRootPath, userFromDb.Image.TrimStart('\\'));
+
+                if (System.IO.File.Exists(imgToDel))
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    System.IO.File.Delete(imgToDel);
                 }
+
+                using (var flieStream = new FileStream(Path.Combine(uploads, userFromDb.UserName + extension_new), FileMode.Create))
+                {
+                    files[0].CopyTo(flieStream);
+                }
+
+                userFromDb.Image = @"\img\user_img\" + userFromDb.UserName + extension_new;
+
+                await _db.SaveChangesAsync();
             }
 
             await _signInManager.RefreshSignInAsync(user);

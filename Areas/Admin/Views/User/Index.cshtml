@@ -1,0 +1,50 @@
+﻿@model IEnumerable<User>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="top-container">
+    <h2>Users</h2>
+    <a asp-controller="Home" asp-action="Index" asp-area="CustomUser" class="btn-back">Back to forums</a>
+</div>
+<div style="border-top: 2px groove #ffffff"></div>
+@if (Model.Count() > 0)
+{
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>Nick</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.UserName)</td>
+                    <td>@Html.DisplayFor(m => item.Email)</td>
+                    <td>
+                        @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                        {
+                            <a asp-action="Lock" asp-route-id="@item.Id" class="btn-del"><i class="fas fa-unlock"></i></a>
+
+                        }
+                        else
+                        {
+                            <a asp-action="Unlock" asp-route-id="@item.Id" class="btn-create"><i class="fas fa-lock-open"></i></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+else
+{
+    <div class="my-container">
+        Brak użytkowników
+    </div>
+}
+

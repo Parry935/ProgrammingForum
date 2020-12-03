@@ -9,9 +9,6 @@ namespace Forum.Models
 {
     public class User : IdentityUser
     {
-        [Required]
-        public string Nick { get; set; }
         public string Image { get; set; }
-
     }
 }
