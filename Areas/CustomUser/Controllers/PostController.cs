@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Forum.Data;
+using Forum.Interfaces.Data;
 using Forum.Models;
 using Forum.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -15,13 +16,12 @@ namespace Forum.Areas.CustomUser.Controllers
     [Area("CustomUser")]
     public class PostController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PostController(ApplicationDbContext db)
+        public PostController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
-
 
         [Authorize]
         [HttpPost]
@@ -44,8 +44,8 @@ namespace Forum.Areas.CustomUser.Controllers
                 PostMessage = postVM.NewPost.PostMessage
             };
 
-            _db.Post.Add(postToDb);
-            await _db.SaveChangesAsync();
+            _unitOfWork.Post.Insert(postToDb);
+            await _unitOfWork.SaveAsync();
 
             return RedirectToAction("TopicDetails", "Topic", new { id = postVM.NewPost.TopicId});
         }

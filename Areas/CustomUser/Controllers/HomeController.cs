@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Forum.Models;
 using Forum.Data;
 using Microsoft.EntityFrameworkCore;
+using Forum.Interfaces.Data;
 
 namespace Forum.Controllers
 {
@@ -16,16 +17,16 @@ namespace Forum.Controllers
     public class HomeController : Controller
     {
 
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ApplicationDbContext db)
+        public HomeController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index()
         {
-            var categories = await _db.Category.ToArrayAsync();
+            var categories = await _unitOfWork.Category.GetAllAsync();
 
             return View(categories);
         }

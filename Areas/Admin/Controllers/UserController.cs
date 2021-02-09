@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Forum.Data;
+using Forum.Interfaces.Data;
 using Forum.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,11 @@ namespace BookShop.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserController(ApplicationDbContext context)
+        public UserController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index()
@@ -27,7 +28,7 @@ namespace BookShop.Areas.Admin.Controllers
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var users = await _context.User.Where(m => m.Id != claim.Value).ToListAsync();
+            var users = await _unitOfWork.User.GetAllAsync(m => m.Id != claim.Value);
 
             return View(users);
         }
@@ -38,8 +39,7 @@ namespace BookShop.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(m => m.Id == id);
 
             if (user == null)
             {
@@ -48,7 +48,7 @@ namespace BookShop.Areas.Admin.Controllers
 
             user.LockoutEnd = DateTime.Now.AddYears(100);
 
-            await _context.SaveChangesAsync();
+            await _unitOfWork.SaveAsync();
 
             return RedirectToAction(nameof(Index));
         }
@@ -60,7 +60,7 @@ namespace BookShop.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(m => m.Id == id);
 
             if (user == null)
             {
@@ -69,7 +69,7 @@ namespace BookShop.Areas.Admin.Controllers
 
             user.LockoutEnd = DateTime.Now;
 
-            await _context.SaveChangesAsync();
+            await _unitOfWork.SaveAsync();
 
             return RedirectToAction(nameof(Index));
         }

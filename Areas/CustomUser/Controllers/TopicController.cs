@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Forum.Data;
+using Forum.Interfaces.Data;
 using Forum.Models;
 using Forum.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +17,11 @@ namespace Forum.Areas.CustomUser.Controllers
     public class TopicController : Controller
     {
 
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public TopicController(ApplicationDbContext db)
+        public TopicController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index(int? id)
@@ -30,9 +31,9 @@ namespace Forum.Areas.CustomUser.Controllers
                 return NotFound();
             }
 
-            var topicList = await _db.Topic.Where(m => m.CategoryId == id).Include(m=>m.User).ToListAsync();
+            var topicList = await _unitOfWork.Topic.GetAllAsync(m => m.CategoryId == id, "User");
 
-            var caregoryFromDB = await _db.Category.SingleOrDefaultAsync(m => m.Id == id);
+            var caregoryFromDB = await _unitOfWork.Category.GetFirstOrDefaultAsync(m => m.Id == id);
 
             TopicVM topicVM = new TopicVM()
             {
@@ -57,10 +58,10 @@ namespace Forum.Areas.CustomUser.Controllers
                 Post = new Post()
             };
 
-            var categoryFromDB = await _db.Category.SingleOrDefaultAsync(m => m.Id == id);
+            var caregoryFromDB = await _unitOfWork.Category.GetFirstOrDefaultAsync(m => m.Id == id);
 
-            createTopic.Topic.Category = categoryFromDB;
-            createTopic.Topic.CategoryId = categoryFromDB.Id;
+            createTopic.Topic.Category = caregoryFromDB;
+            createTopic.Topic.CategoryId = caregoryFromDB.Id;
 
             return View(createTopic);
         }
@@ -82,7 +83,7 @@ namespace Forum.Areas.CustomUser.Controllers
 
             DateTime timeNow = DateTime.Now;
 
-            var categoryFromDB = await _db.Category.SingleOrDefaultAsync(m => m.Id == createTopic.Topic.CategoryId);
+            var categoryFromDB = await _unitOfWork.Category.GetFirstOrDefaultAsync(m => m.Id == createTopic.Topic.CategoryId);
 
 
             Topic topicToDb = new Topic()
@@ -94,10 +95,8 @@ namespace Forum.Areas.CustomUser.Controllers
             };
 
 
-            _db.Topic.Add(topicToDb);
-            await _db.SaveChangesAsync();
-
-
+            _unitOfWork.Topic.Insert(topicToDb);
+            await _unitOfWork.SaveAsync();
 
             Post postToDb = new Post()
             {
@@ -108,8 +107,8 @@ namespace Forum.Areas.CustomUser.Controllers
                 PostMessage = createTopic.Post.PostMessage   
             };
 
-            _db.Post.Add(postToDb);
-            await _db.SaveChangesAsync();
+            _unitOfWork.Post.Insert(postToDb);
+            await _unitOfWork.SaveAsync();
 
 
             return RedirectToAction("Index", new { id = createTopic.Topic.CategoryId });
@@ -123,14 +122,14 @@ namespace Forum.Areas.CustomUser.Controllers
                 return NotFound();
             }
 
-            var topicFromDb = await _db.Topic.SingleOrDefaultAsync(m=>m.Id == id);
+            var topicFromDb = await _unitOfWork.Topic.GetFirstOrDefaultAsync(m => m.Id == id);
 
             if (topicFromDb == null)
             {
                 return NotFound();
             }
 
-            var postList = await _db.Post.Include(m => m.User).Include(m=>m.Topic).Include(m=>m.Category).Where(m=>m.TopicId == topicFromDb.Id).ToListAsync();
+            var postList = await _unitOfWork.Post.GetAllAsync(m => m.TopicId == topicFromDb.Id, "User,Topic,Category");
 
             CreatePostVM createPost = new CreatePostVM()
             {

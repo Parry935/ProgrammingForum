@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Forum.Data;
+using Forum.Interfaces.Data;
 using Forum.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,18 +15,18 @@ namespace Forum.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
         private IWebHostEnvironment _env;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(ApplicationDbContext db, IWebHostEnvironment env)
+        public CategoryController(IWebHostEnvironment env, IUnitOfWork unitOfWork)
         {
-            _db = db;
             _env = env;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index()
         {
-            var categories = await _db.Category.ToArrayAsync();
+            var categories = await _unitOfWork.Category.GetAllAsync();
 
             return View(categories);
         }
@@ -48,13 +49,13 @@ namespace Forum.Areas.Admin.Controllers
             }
 
 
-            _db.Category.Add(category);
-            await _db.SaveChangesAsync();
+            _unitOfWork.Category.Insert(category);
+            await _unitOfWork.SaveAsync();
 
             string webRootPath = _env.WebRootPath;
             var files = HttpContext.Request.Form.Files;
 
-            var categoryFromDB = await _db.Category.FindAsync(category.Id);
+            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(category.Id);
 
             if (files.Count > 0)
             {
@@ -75,7 +76,7 @@ namespace Forum.Areas.Admin.Controllers
                 categoryFromDB.Image = @"\img\category_img\" + category.Id + ".png";
             }
 
-            await _db.SaveChangesAsync();
+            await _unitOfWork.SaveAsync();
 
             return RedirectToAction(nameof(Index));
         }
@@ -86,7 +87,7 @@ namespace Forum.Areas.Admin.Controllers
             if (id == null)
                 return NotFound();
 
-            var categoryFromDB = await _db.Category.FindAsync(id);
+            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(id.Value);
 
             if (categoryFromDB == null)
                 return NotFound();
@@ -114,7 +115,7 @@ namespace Forum.Areas.Admin.Controllers
             var files = HttpContext.Request.Form.Files;
 
 
-            var categoryFromDB = await _db.Category.FindAsync(category.Id);
+            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(category.Id);
 
             if (files.Count > 0)
             {
@@ -139,7 +140,7 @@ namespace Forum.Areas.Admin.Controllers
             categoryFromDB.Name = category.Name;
             categoryFromDB.Description = category.Description;
 
-            await _db.SaveChangesAsync();
+            await _unitOfWork.SaveAsync();
 
             return RedirectToAction(nameof(Index));
 
@@ -151,7 +152,7 @@ namespace Forum.Areas.Admin.Controllers
             if (id == null)
                 return NotFound();
 
-            var categoryFromDB = await _db.Category.FindAsync(id);
+            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(id.Value);
 
             if (categoryFromDB == null)
                 return NotFound();
@@ -168,7 +169,7 @@ namespace Forum.Areas.Admin.Controllers
             if (id == null)
                 return NotFound();
 
-            var categoryFromDB = await _db.Category.FindAsync(id);
+            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(id.Value);
 
             if (categoryFromDB == null)
                 return NotFound();
@@ -182,9 +183,9 @@ namespace Forum.Areas.Admin.Controllers
                 System.IO.File.Delete(imgToDel);
             }
 
-            _db.Category.Remove(categoryFromDB);
+            _unitOfWork.Category.Remove(categoryFromDB);
 
-            await _db.SaveChangesAsync();
+            await _unitOfWork.SaveAsync();
 
             return RedirectToAction(nameof(Index));
         }

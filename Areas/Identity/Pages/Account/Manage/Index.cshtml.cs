@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Forum.Data;
+using Forum.Interfaces.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +18,18 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
         private IWebHostEnvironment _env;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ApplicationDbContext db,
+            IUnitOfWork unitOfWork,
             IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _db = db;
+            _unitOfWork = unitOfWork;
             _env = env;
         }
 
@@ -55,7 +56,7 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var userFromDb = _db.User.SingleOrDefault(m => m.Id == claim.Value);
+            var userFromDb = await _unitOfWork.User.GetFirstOrDefaultAsync(m => m.Id == claim.Value);
 
             Input = new InputModel()
             {
@@ -93,7 +94,7 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var userFromDb = _db.User.SingleOrDefault(m => m.Id == claim.Value);
+            var userFromDb = await _unitOfWork.User.GetFirstOrDefaultAsync(m => m.Id == claim.Value);
 
             string webRootPath = _env.WebRootPath;
             var files = HttpContext.Request.Form.Files;
@@ -117,7 +118,7 @@ namespace Forum.Areas.Identity.Pages.Account.Manage
 
                 userFromDb.Image = @"\img\user_img\" + userFromDb.UserName + extension_new;
 
-                await _db.SaveChangesAsync();
+                await _unitOfWork.SaveAsync();
             }
 
             await _signInManager.RefreshSignInAsync(user);
