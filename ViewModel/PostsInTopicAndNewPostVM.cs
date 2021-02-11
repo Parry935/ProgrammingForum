@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Forum.ViewModel
 {
-    public class CreateTopicVM
+    public class PostsInTopicAndNewPostVM
     {
-        public Post Post { get; set; }
-        public Topic Topic { get; set; }
+        public IEnumerable<Post> Posts { get; set; }
+        public Post NewPost { get; set; }
     }
 }

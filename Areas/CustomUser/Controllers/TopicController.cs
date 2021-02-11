@@ -31,17 +31,29 @@ namespace Forum.Areas.CustomUser.Controllers
                 return NotFound();
             }
 
-            var topicList = await _unitOfWork.Topic.GetAllAsync(m => m.CategoryId == id, "User");
+            var topicsInCategory = await _unitOfWork.Topic.GetAllAsync(m => m.CategoryId == id, "User");
 
             var caregoryFromDB = await _unitOfWork.Category.GetFirstOrDefaultAsync(m => m.Id == id);
 
-            TopicVM topicVM = new TopicVM()
+            var topiscWithLastPost = new List<TopicWithPostVM>();
+
+            foreach (var topic in topicsInCategory)
             {
-                Topics = topicList,
+                topiscWithLastPost.Add(new TopicWithPostVM()
+                {
+                    Topic = topic,
+                    Post = await _unitOfWork.Post.GetLastPostForTopic(topic.Id)
+                }
+                );
+            }
+
+            TopicsVM topicsVM = new TopicsVM()
+            {
+                TopicsWithLastPosts = topiscWithLastPost,
                 Category = caregoryFromDB
             };
 
-            return View(topicVM);
+            return View(topicsVM);
         }
 
         [Authorize]
@@ -52,7 +64,7 @@ namespace Forum.Areas.CustomUser.Controllers
                 return NotFound();
             }
 
-            CreateTopicVM createTopic = new CreateTopicVM()
+            TopicWithPostVM createTopic = new TopicWithPostVM()
             {
                 Topic = new Topic(),
                 Post = new Post()
@@ -70,7 +82,7 @@ namespace Forum.Areas.CustomUser.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create(CreateTopicVM createTopic)
+        public async Task<IActionResult> Create(TopicWithPostVM createTopic)
         {
             if (!ModelState.IsValid)
             {
@@ -110,6 +122,9 @@ namespace Forum.Areas.CustomUser.Controllers
             _unitOfWork.Post.Insert(postToDb);
             await _unitOfWork.SaveAsync();
 
+            _unitOfWork.Category.addTopicAndPostCount(postToDb.CategoryId);
+            await _unitOfWork.SaveAsync();
+
 
             return RedirectToAction("Index", new { id = createTopic.Topic.CategoryId });
         }
@@ -131,7 +146,7 @@ namespace Forum.Areas.CustomUser.Controllers
 
             var postList = await _unitOfWork.Post.GetAllAsync(m => m.TopicId == topicFromDb.Id, "User,Topic,Category");
 
-            CreatePostVM createPost = new CreatePostVM()
+            PostsInTopicAndNewPostVM createPost = new PostsInTopicAndNewPostVM()
             {
                 Posts = postList,
                 NewPost = new Post()

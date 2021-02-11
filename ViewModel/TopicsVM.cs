@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Forum.ViewModel
 {
-    public class TopicVM
+    public class TopicsVM
     {
-        public IEnumerable<Topic> Topics { get; set; }
+        public IEnumerable<TopicWithPostVM> TopicsWithLastPosts { get; set; }
         public Category Category { get; set; }
     }
 }

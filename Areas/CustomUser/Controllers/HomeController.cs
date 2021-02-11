@@ -9,6 +9,7 @@ using Forum.Models;
 using Forum.Data;
 using Microsoft.EntityFrameworkCore;
 using Forum.Interfaces.Data;
+using Forum.ViewModel;
 
 namespace Forum.Controllers
 {
@@ -28,7 +29,18 @@ namespace Forum.Controllers
         {
             var categories = await _unitOfWork.Category.GetAllAsync();
 
-            return View(categories);
+            var homeVM = new List<HomeVM>();
+
+            foreach (var category in categories)
+            {
+                homeVM.Add(new HomeVM(){
+                    Category = category,
+                    LastPost = await _unitOfWork.Post.GetLastPostForCategory(category.Id)}
+                );
+            }
+            
+
+            return View(homeVM);
         }
 
 

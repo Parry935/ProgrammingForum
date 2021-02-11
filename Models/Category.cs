@@ -17,5 +17,9 @@ namespace Forum.Models
         public string Description { get; set; }
 
         public string Image { get; set; }
+
+        public int CountTopics { get; set; } = 0;
+
+        public int CountPosts { get; set; } = 0;
     }
 }

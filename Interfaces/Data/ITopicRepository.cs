@@ -8,5 +8,6 @@ namespace Forum.Interfaces.Data
 {
     public interface ITopicRepository : IRepository<Topic>
     {
+        void addPostCount(int topicId);
     }
 }

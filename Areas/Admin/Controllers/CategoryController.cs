@@ -183,6 +183,11 @@ namespace Forum.Areas.Admin.Controllers
                 System.IO.File.Delete(imgToDel);
             }
 
+            var topicsFromCategory = await _unitOfWork.Topic.GetAllAsync(m => m.CategoryId == categoryFromDB.Id);
+
+            if (topicsFromCategory != null)
+                _unitOfWork.Topic.RemoveRange(topicsFromCategory);
+
             _unitOfWork.Category.Remove(categoryFromDB);
 
             await _unitOfWork.SaveAsync();

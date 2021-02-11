@@ -26,7 +26,7 @@ namespace Forum.Areas.CustomUser.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreatePostVM postVM)
+        public async Task<IActionResult> Create(PostsInTopicAndNewPostVM postVM)
         {
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -46,6 +46,13 @@ namespace Forum.Areas.CustomUser.Controllers
 
             _unitOfWork.Post.Insert(postToDb);
             await _unitOfWork.SaveAsync();
+
+            _unitOfWork.Category.addPostCount(postToDb.CategoryId);
+            await _unitOfWork.SaveAsync();
+
+            _unitOfWork.Topic.addPostCount(postToDb.TopicId);
+            await _unitOfWork.SaveAsync();
+
 
             return RedirectToAction("TopicDetails", "Topic", new { id = postVM.NewPost.TopicId});
         }

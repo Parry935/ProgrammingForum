@@ -8,5 +8,9 @@ namespace Forum.Interfaces.Data
 {
     public interface IPostRepository : IRepository<Post>
     {
+
+        Task<Post> GetLastPostForCategory(int categoryId);
+
+        Task<Post> GetLastPostForTopic(int topicId);
     }
 }

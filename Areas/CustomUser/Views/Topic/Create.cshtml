@@ -1,4 +1,4 @@
-﻿@model Forum.ViewModel.CreateTopicVM
+﻿@model Forum.ViewModel.TopicWithPostVM
 @{
     ViewData["Title"] = "Create";
 }
@@ -18,12 +18,12 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form_item" style="width:60vw;">
             <label asp-for="Topic.TopicTittle"></label>
-            <input asp-for="Topic.TopicTittle" placeholder="Topic Tittle" class="form-control" />
+            <input asp-for="Topic.TopicTittle" placeholder="Topic Tittle" class="form-control" style="font-weight:700;"/>
             <span asp-validation-for="Topic.TopicTittle" style="color: #FFA7A7; font-size:17px"></span>
         </div>
         <div class="form_item" style="width:60vw;">
             <label asp-for="Post.PostMessage"></label>
-            <textarea asp-for="Post.PostMessage" placeholder="Content" class="form-control" style="height:200px"></textarea>
+            <textarea asp-for="Post.PostMessage" placeholder="Content" class="form-control" style="height:200px; font-weight:700;"></textarea>
             <span asp-validation-for="Post.PostMessage" style="color: #FFA7A7; font-size:17px"></span>
         </div>
         <input type="submit" value="Submit" class="btn-create" style="margin-top:30px;" />

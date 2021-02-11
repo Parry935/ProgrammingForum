@@ -1,0 +1,19 @@
+﻿@model DateTime
+@{
+}
+@if (Model.AddHours(1) > DateTime.Now)
+{
+    <span>@((DateTime.Now - Model).Minutes) minut temu</span>
+}
+else if (Model.AddDays(1) > DateTime.Now)
+{
+    <span>dzisiaj @Model.ToString("HH:mm")</span>
+}
+else if (Model.AddDays(2) > DateTime.Now)
+{
+    <span>wczoraj @Model.ToString("HH:mm")</span>
+}
+else
+{
+    <span>@Model.ToShortDateString()</span>
+}

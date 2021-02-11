@@ -30,5 +30,6 @@ namespace Forum.Models
         [Required]
         public string TopicTittle { get; set; }
 
+        public int CountPosts { get; set; } = 0;
     }
 }

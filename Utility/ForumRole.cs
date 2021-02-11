@@ -9,5 +9,8 @@ namespace Forum.Utility
     {
         public const string Admin = "Admin";
         public const string CustomUser = "CustomUser";
+
+
+        public const string AdminNickname = "user";
     }
 }
