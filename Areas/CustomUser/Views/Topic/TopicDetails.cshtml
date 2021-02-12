@@ -5,8 +5,10 @@
 }
 
 <div class="top-container">
-    <h2>@Model.Posts.FirstOrDefault().Topic.TopicTittle</h2>
-    <img src="@Model.Posts.FirstOrDefault().Topic.Category.Image" style="width:3vw; display:block; border-radius:15px;" />
+    <div>
+        <h2 style="display:inline-block">@Model.Posts.FirstOrDefault().Topic.TopicTittle</h2>
+        <img src="@Model.Posts.FirstOrDefault().Topic.Category.Image" style="width:40px; display: inline-block; border-radius: 5px; margin-bottom: 15px; margin-left: 5px;" />
+    </div>
     <a asp-controller="Topic" asp-action="Index" asp-area="CustomUser" asp-route-id="@Model.Posts.FirstOrDefault().CategoryId" class="btn-back">Back to topics</a>
 </div>
 <div style="border-top: 2px groove #ffffff"></div>
@@ -20,9 +22,8 @@
                 if (Model.Posts.First() == item)
                 {
                     <tr style="border-bottom: 7px solid #E4FED2;">
-                        <td style="width: 8vw; text-align: center; padding-bottom: 25px;">
-                            <img src="@item.User.Image" style="width:5vw; display:block; border-radius:15px; margin:auto" />
-                            <br />
+                        <td style="width: 110px; text-align: center;">
+                            <img src="@item.User.Image" style="width:70px; display:block; border-radius:15px; margin:auto" />
                             <partial name="_DateFormatPartial" model="@item.PostDate" />
                             <br />
                             @Html.DisplayFor(m => item.User.UserName)<br />
@@ -32,8 +33,8 @@
                             }
 
                         </td>
-                        <td style="padding-bottom: 25px;">
-                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:200px; font-weight:700;"></textarea>
+                        <td>
+                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:180px; font-weight:700;"></textarea>
                         </td>
                     </tr>
 
@@ -42,9 +43,8 @@
                 else
                 {
                     <tr>
-                        <td style="width: 8vw; text-align: center;">
-                            <img src="@item.User.Image" style="width:5vw; display:block; border-radius:15px; margin:auto" />
-                            <br />
+                        <td style="width:110px; text-align: center;">
+                            <img src="@item.User.Image" style="width: 70px; display: block; border-radius: 15px; margin: auto" />
                             <partial name="_DateFormatPartial" model="@item.PostDate" />
                             <br />
                             @Html.DisplayFor(m => item.User.UserName)<br />
@@ -54,7 +54,7 @@
                             }
                         </td>
                         <td>
-                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:200px; font-weight:700;"></textarea>
+                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:180px; font-weight:700;"></textarea>
                         </td>
                     </tr>
                 }

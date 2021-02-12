@@ -4,47 +4,56 @@
 }
 
 <div class="top-container">
-    <h2>@Model.Category.Name</h2>
-    <img src="@Model.Category.Image" style="width:3vw; display:block; border-radius:15px;" />
+    <div>
+        <h2 style="display:inline-block">@Model.Category.Name</h2>
+        <img src="@Model.Category.Image" style="width: 40px; display: inline-block; border-radius: 5px; margin-bottom: 15px; margin-left: 5px;" />
+    </div>
     <a asp-controller="Topic" asp-action="Create" asp-area="CustomUser" asp-route-id="@Model.Category.Id" class="btn-create">Create new topic</a>
 </div>
 <div style="border-top: 2px groove #ffffff"></div>
 
+<div class="input-group input-group mb-2 mt-2">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fas fa-search"></i></span>
+    </div>
+    <input id="topicFilter" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Wyszukaj wątek..">
+</div>
+
 @if (Model.TopicsWithLastPosts.Count() > 0)
 {
-<table class="table table-dark">
-    <thead>
-        <tr>
-            <th colspan="2">Dostępne wątki</th>
-            <th style="text-align:center">Posty</th>
-            <th>Ostatni wpis</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.TopicsWithLastPosts)
-        {
-        <tr>
-            <td style="width: 8vw; text-align: center; "><i class="fas fa-comments" style="font-size: 10vh"></i></td>
-            <td>
-                <a asp-action="TopicDetails" asp-controller="Topic" asp-area="CustomUser" asp-route-id="@item.Topic.Id" style="font-size:22px; color:#B9F98A">@Html.DisplayFor(m => item.Topic.TopicTittle)</a><br />
-                <p>Stworzony <partial name="_DateFormatPartial" model="@item.Topic.TopicDate" /> przez @Html.DisplayFor(m => item.Topic.User.UserName)</p>
-            </td>
-            <td style="text-align:center">
-                @Html.DisplayFor(m => item.Topic.CountPosts)
-            </td>
-            <td style="width:20%">
-                @if (item.Post != null)
-                {
-                    <partial name="_DateFormatPartial" model="@item.Post.PostDate" />
-                    <br />
-                    <img src="@item.Post.User.Image" style="width:2vw; display:inline-block; border-radius:15px; margin:auto" />
-                    @Html.DisplayFor(m => item.Post.User.UserName)
-                }
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+    <table id="topicTable" class="table table-dark">
+        <thead>
+            <tr>
+                <th colspan="2">Dostępne wątki</th>
+                <th style="text-align:center">Posty</th>
+                <th>Ostatni wpis</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.TopicsWithLastPosts)
+            {
+                <tr>
+                    <td style="text-align: center; vertical-align: middle; padding:0;"><i class="fas fa-comments" style="font-size: 50px;"></i></td>
+                    <td>
+                        <a asp-action="TopicDetails" asp-controller="Topic" asp-area="CustomUser" asp-route-id="@item.Topic.Id" style="font-size:22px; color:#B9F98A" class="title">@Html.DisplayFor(m => item.Topic.TopicTittle)</a><br />
+                        <p>Stworzony <partial name="_DateFormatPartial" model="@item.Topic.TopicDate" /> przez @Html.DisplayFor(m => item.Topic.User.UserName)</p>
+                    </td>
+                    <td style="text-align:center; vertical-align: middle;">
+                        @Html.DisplayFor(m => item.Topic.CountPosts)
+                    </td>
+                    <td style="width:15%">
+                        @if (item.Post != null)
+                        {
+                            <partial name="_DateFormatPartial" model="@item.Post.PostDate" />
+                            <br />
+                            <img src="@item.Post.User.Image" style="width:35px; display:inline-block; border-radius:15px; margin:auto" />
+                            <span style="margin-left:5px;">@Html.DisplayFor(m => item.Post.User.UserName)</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 else
@@ -52,5 +61,21 @@ else
     <div class="my-container">
         Brak wątków
     </div>
+}
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#topicFilter").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#topicTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
 }
 
