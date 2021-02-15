@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Forum.Data;
 using Forum.Interfaces.Data;
 using Forum.Models;
+using Forum.Utility;
 using Forum.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace Forum.Areas.CustomUser.Controllers
 
             TopicsVM topicsVM = new TopicsVM()
             {
-                TopicsWithLastPosts = topiscWithLastPost,
+                TopicsWithLastPosts = topiscWithLastPost.OrderByDescending(m => m.Topic.Awarded).ThenByDescending(m => m.Post.PostDate).ToList(),
                 Category = caregoryFromDB
             };
 
@@ -122,7 +123,7 @@ namespace Forum.Areas.CustomUser.Controllers
             _unitOfWork.Post.Insert(postToDb);
             await _unitOfWork.SaveAsync();
 
-            _unitOfWork.Category.addTopicAndPostCount(postToDb.CategoryId);
+            _unitOfWork.Category.increasTopicAndPostCount(postToDb.CategoryId);
             await _unitOfWork.SaveAsync();
 
 
@@ -144,7 +145,7 @@ namespace Forum.Areas.CustomUser.Controllers
                 return NotFound();
             }
 
-            var postList = await _unitOfWork.Post.GetAllAsync(m => m.TopicId == topicFromDb.Id, "User,Topic,Category");
+            var postList = await _unitOfWork.Post.GetAllAsync(m => m.TopicId == topicFromDb.Id, "User,Topic,Category", m=>m.OrderBy(x=>x.PostDate));
 
             PostsInTopicAndNewPostVM createPost = new PostsInTopicAndNewPostVM()
             {

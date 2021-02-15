@@ -1,0 +1,37 @@
+﻿@model Forum.Models.Post
+@using Forum.Utility
+@{
+    ViewData["Title"] = "Delete post";
+}
+
+<div class="top-container">
+    <h2>Delete post</h2>
+    <a asp-controller="Topic" asp-action="TopicDetails" asp-area="CustomUser" asp-route-id="@Model.TopicId" class="btn-back">Back to topic</a>
+</div>
+<div style="border-top: 2px groove #ffffff"></div>
+
+<div class="my-flex-container">
+    <div style="width:100px; text-align:center;">
+        <img src="@Model.User.Image" style="width:70px; display:block; border-radius:15px; margin:auto" />
+        <partial name="_DateFormatPartial" model="@Model.PostDate" />
+        <br />
+        @Html.DisplayFor(m => Model.User.UserName)<br />
+        @if (Model.User.UserName == ForumRole.AdminNickname)
+        {
+            <span style="background:yellow; color:black; padding:2px; font-size:12px; border-radius: 2px;">@ForumRole.Admin</span>
+        }
+    </div>
+    <div style="width:80%;">
+        <form method="post">
+            <div class="form_item" style="width:100%;">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="TopicId" />
+                <input type="hidden" asp-for="CategoryId" />
+                <label asp-for="PostMessage"></label>
+                <textarea asp-for="PostMessage" placeholder="Content" class="form-control" style="height:200px; font-weight:700;" readonly></textarea>
+            </div>
+            <input type="submit" value="Submit" class="btn-del" style="margin-top:30px;" />
+        </form>
+    </div>
+</div>
+

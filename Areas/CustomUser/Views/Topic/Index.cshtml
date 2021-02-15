@@ -1,4 +1,5 @@
 ﻿@model Forum.ViewModel.TopicsVM
+@using Forum.Utility
 @{
     ViewData["Title"] = "Index";
 }
@@ -11,6 +12,7 @@
     <a asp-controller="Topic" asp-action="Create" asp-area="CustomUser" asp-route-id="@Model.Category.Id" class="btn-create">Create new topic</a>
 </div>
 <div style="border-top: 2px groove #ffffff"></div>
+
 
 <div class="input-group input-group mb-2 mt-2">
     <div class="input-group-prepend">
@@ -27,15 +29,33 @@
                 <th colspan="2">Dostępne wątki</th>
                 <th style="text-align:center">Posty</th>
                 <th>Ostatni wpis</th>
+                @if (User.IsInRole(ForumRole.Admin))
+                {
+                    <th width="17%" style="text-align:center;">Akcje</th>
+                }
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.TopicsWithLastPosts)
             {
                 <tr>
-                    <td style="text-align: center; vertical-align: middle; padding:0;"><i class="fas fa-comments" style="font-size: 50px;"></i></td>
+                    <td style="text-align: center; vertical-align: middle; padding:0;">
+                        @if (item.Topic.Lock == false)
+                        {
+                            <i class="fas fa-comments" style="font-size: 50px;"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-unlock" style="font-size: 50px;"></i>
+                        }
+                    </td>
                     <td>
-                        <a asp-action="TopicDetails" asp-controller="Topic" asp-area="CustomUser" asp-route-id="@item.Topic.Id" style="font-size:22px; color:#B9F98A" class="title">@Html.DisplayFor(m => item.Topic.TopicTittle)</a><br />
+                        <a asp-action="TopicDetails" asp-controller="Topic" asp-area="CustomUser" asp-route-id="@item.Topic.Id" style="font-size:22px; color:#B9F98A" class="title">@Html.DisplayFor(m => item.Topic.TopicTittle)</a>
+                        @if (item.Topic.Awarded == true)
+                        {
+                            <i class="fas fa-star" style="color:yellow; margin-left:5px;"></i>
+                        }
+                        <br />
                         <p>Stworzony <partial name="_DateFormatPartial" model="@item.Topic.TopicDate" /> przez @Html.DisplayFor(m => item.Topic.User.UserName)</p>
                     </td>
                     <td style="text-align:center; vertical-align: middle;">
@@ -50,6 +70,29 @@
                             <span style="margin-left:5px;">@Html.DisplayFor(m => item.Post.User.UserName)</span>
                         }
                     </td>
+
+                    @if (User.IsInRole(ForumRole.Admin))
+                    {
+                <td style="text-align:center; vertical-align: middle;" class="resize-btn">
+                    @if (item.Topic.Awarded == true)
+                    {
+                        <button class="btn-grey" onclick="RemoveAwardTopic(@item.Topic.Id)"><i class="fas fa-star"></i></button>
+                    }
+                    else
+                    {
+                        <button class="btn-yel" onclick="AddAwardTopic(@item.Topic.Id)"><i class="fas fa-star"></i></button>
+                    }
+                    @if (item.Topic.Lock == true)
+                    {
+                        <button class="btn-create" onclick="UnlockTopic(@item.Topic.Id)"><i class="fas fa-lock-open"></i></button>
+                    }
+                    else
+                    {
+                        <button class="btn-del" onclick="LockTopic(@item.Topic.Id)"><i class="fas fa-unlock"></i></button>
+                    }
+                    <button class="btn-del" onclick="DeleteConfirm(@item.Topic.Id)"><i class="fas fa-trash-alt"></i></button>
+                </td>
+                    }
                 </tr>
             }
         </tbody>
@@ -63,10 +106,9 @@ else
     </div>
 }
 
-
 @section Scripts{
 
-    <script>
+    <script type="text/javascript">
         $(document).ready(function () {
             $("#topicFilter").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
@@ -75,6 +117,121 @@ else
                 });
             });
         });
+
+        function DeleteConfirm(id) {
+
+            swal({
+                title: "Jesteś pewien usunięcia wątku?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/Admin/ManageTopic/Delete/" + id,
+                        success: function (data) {
+                            if (data.success) {
+                                swal({
+                                    title: "Poprawnie usunięto wątek",
+                                    icon: "success",
+                                    button: "OK",
+                                }).then(function () {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                swal("Nieoczekiwany błąd podczas usuniecia")
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function LockTopic(id) {
+            $.ajax({
+                type: "PATCH",
+                url: "/Admin/ManageTopic/LockTopic/" + id,
+                success: function (data) {
+                    if (data.success) {
+                        swal({
+                            title: "Zamknięto wątek",
+                            icon: "info",
+                            button: "OK",
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        swal("Nieoczekiwany błąd podczas zamknięcia wątku")
+                    }
+                }
+            });
+        }
+
+        function UnlockTopic(id) {
+            $.ajax({
+                type: "PATCH",
+                url: "/Admin/ManageTopic/UnlockTopic/" + id,
+                success: function (data) {
+                    if (data.success) {
+                        swal({
+                            title: "Otowrzono wątek",
+                            icon: "info",
+                            button: "OK",
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        swal("Nieoczekiwany błąd podczas otworzenia wątku")
+                    }
+                }
+            });
+        }
+
+        function AddAwardTopic(id) {
+            $.ajax({
+                type: "PATCH",
+                url: "/Admin/ManageTopic/AddAwardTopic/" + id,
+                success: function (data) {
+                    if (data.success) {
+                        swal({
+                            title: "Wyróżniono wątek",
+                            icon: "info",
+                            button: "OK",
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        swal("Nieoczekiwany błąd podczas wyróżnienia wątku")
+                    }
+                }
+            });
+        }
+
+        function RemoveAwardTopic(id) {
+            $.ajax({
+                type: "PATCH",
+                url: "/Admin/ManageTopic/RemoveAwardTopic/" + id,
+                success: function (data) {
+                    if (data.success) {
+                        swal({
+                            title: "Usunięto wyróżnienie wątku",
+                            icon: "info",
+                            button: "OK",
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        swal("Nieoczekiwany błąd podczas usunięcia wyróżnienia wątku")
+                    }
+                }
+            });
+        }
     </script>
 
 }

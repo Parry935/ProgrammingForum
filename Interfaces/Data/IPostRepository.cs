@@ -12,5 +12,7 @@ namespace Forum.Interfaces.Data
         Task<Post> GetLastPostForCategory(int categoryId);
 
         Task<Post> GetLastPostForTopic(int topicId);
+        void UpdatePostContent(int id, string postMessage);
+        bool CheckIfPostIsFirst(Post post);
     }
 }

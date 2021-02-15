@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookShop.Services
+namespace Forum.Services
 {
     public class EmailSender : IEmailSender
     {

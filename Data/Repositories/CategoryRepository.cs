@@ -16,7 +16,8 @@ namespace Forum.Data.Repositories
             _db = db;
         }
 
-        public void addPostCount(int categoryId)
+        //crate post
+        public void increasPostCount(int categoryId)
         {
             var category = _db.Category.Find(categoryId);
 
@@ -25,12 +26,36 @@ namespace Forum.Data.Repositories
             _db.Category.Update(category);
         }
 
-        public void addTopicAndPostCount(int categoryId)
+        //create topic
+        public void increasTopicAndPostCount(int categoryId)
         {
             var category = _db.Category.Find(categoryId);
 
             category.CountPosts += 1;
             category.CountTopics += 1;
+
+            _db.Category.Update(category);
+        }
+
+        //delete post
+        public void decreasePostCount(int categoryId)
+        {
+            var category = _db.Category.Find(categoryId);
+
+            category.CountPosts -= 1;
+
+            _db.Category.Update(category);
+        }
+
+        //delete topic
+        public void decreaseTopicAndPostCount(int categoryId, int topicId)
+        {
+            var category = _db.Category.Find(categoryId);
+
+            var cntPost = _db.Topic.Find(topicId).CountPosts;
+
+            category.CountPosts -= cntPost;
+            category.CountTopics -= 1;
 
             _db.Category.Update(category);
         }

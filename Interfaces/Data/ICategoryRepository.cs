@@ -8,8 +8,12 @@ namespace Forum.Interfaces.Data
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        void addPostCount(int categoryId);
+        void increasPostCount(int categoryId);
 
-        void addTopicAndPostCount(int categoryId);
+        void increasTopicAndPostCount(int categoryId);
+
+        void decreasePostCount(int categoryId);
+
+        void decreaseTopicAndPostCount(int categoryId, int topicId);
     }
 }

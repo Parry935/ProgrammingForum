@@ -33,12 +33,14 @@ namespace Forum.Controllers
 
             foreach (var category in categories)
             {
-                homeVM.Add(new HomeVM(){
+                homeVM.Add(new HomeVM()
+                {
                     Category = category,
-                    LastPost = await _unitOfWork.Post.GetLastPostForCategory(category.Id)}
+                    LastPost = await _unitOfWork.Post.GetLastPostForCategory(category.Id)
+                }
                 );
             }
-            
+
 
             return View(homeVM);
         }

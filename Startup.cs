@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using BookShop.Services;
+using Forum.Services;
 using Forum.Interfaces.Data;
 
 namespace Forum

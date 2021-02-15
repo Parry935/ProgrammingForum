@@ -1,5 +1,7 @@
 ﻿@model Forum.ViewModel.PostsInTopicAndNewPostVM
 @using Forum.Utility
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Index";
 }
@@ -31,14 +33,18 @@
                             {
                                 <span style="background:yellow; color:black; padding:2px; font-size:12px; border-radius: 2px;">@ForumRole.Admin</span>
                             }
+                            @if (item.User.Id == UserManager.GetUserId(User) || User.IsInRole(ForumRole.Admin))
+                            {
+                        <div style="display:flex; justify-content:center; margin-top:7px;">
+                            <a asp-action="Edit" asp-controller="Post" asp-area="CustomUser" asp-route-id="@item.Id" class="btn-create" style="padding:3px 10px;"><i class="far fa-edit"></i></a>
+                        </div>
+                            }
 
                         </td>
                         <td>
-                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:180px; font-weight:700;"></textarea>
+                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:230px; font-weight:700;"></textarea>
                         </td>
                     </tr>
-
-
                 }
                 else
                 {
@@ -52,32 +58,42 @@
                             {
                                 <span style="background:yellow; color:black; padding:2px; font-size:12px; border-radius: 2px;">@ForumRole.Admin</span>
                             }
+                            @if (item.User.Id == UserManager.GetUserId(User) || User.IsInRole(ForumRole.Admin))
+                            {
+                                <div style="display:flex; justify-content:space-between; margin-top:7px;">
+                                    <a asp-action="Edit" asp-controller="Post" asp-area="CustomUser" asp-route-id="@item.Id" class="btn-create" style="padding:3px 10px;"><i class="far fa-edit"></i></a>
+                                    <a asp-action="Delete" asp-controller="Post" asp-area="CustomUser" asp-route-id="@item.Id" class="btn-del" style="padding: 3px 10px;"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            }
                         </td>
                         <td>
-                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:180px; font-weight:700;"></textarea>
+                            <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:230px; font-weight:700;"></textarea>
                         </td>
                     </tr>
                 }
             }
         </tbody>
     </table>
-    if (User.Identity.IsAuthenticated)
+    if (Model.Posts.FirstOrDefault().Topic.Lock == false)
     {
-    <div id="add-post-btn">
-        <div class="my-flex-container">
-            <form method="post" asp-action="Create" asp-controller="Post" asp-area="CustomUser">
-                <input type="hidden" asp-for="NewPost.TopicId"/>
-                <input type="hidden" asp-for="NewPost.CategoryId"/>
-                <div class="form_item" style="width:60vw;">
-                    <label asp-for="NewPost.PostMessage"></label>
-                    <textarea asp-for="NewPost.PostMessage" placeholder="Content" class="form-control" style="height:200px; font-weight:700;"></textarea>
-                    <span asp-validation-for="NewPost.PostMessage" style="color: #FFA7A7; font-size:17px"></span>
-                </div>
-                <input type="submit" value="Post answer" class="btn-create" style="margin-top:20px;" />
-            </form>
+        if (User.Identity.IsAuthenticated)
+        {
+        <div id="add-post-btn">
+            <div class="my-flex-container">
+                <form method="post" asp-action="Create" asp-controller="Post" asp-area="CustomUser">
+                    <input type="hidden" asp-for="NewPost.TopicId" />
+                    <input type="hidden" asp-for="NewPost.CategoryId" />
+                    <div class="form_item" style="width:60vw;">
+                        <label asp-for="NewPost.PostMessage"></label>
+                        <textarea asp-for="NewPost.PostMessage" placeholder="Content" class="form-control" style="height:200px; font-weight:700;"></textarea>
+                        <span asp-validation-for="NewPost.PostMessage" style="color: #FFA7A7; font-size:17px"></span>
+                    </div>
+                    <input type="submit" value="Post answer" class="btn-create" style="margin-top:20px;" />
+                </form>
+            </div>
+            <button class="btn-yel">Add your answer</button>
         </div>
-        <button class="btn-yel">Add your answer</button>
-    </div>
+        }
     }
 }
 
@@ -92,7 +108,7 @@ else
 @section Scripts{
 
     <partial name="_ValidationScriptsPartial" />
-    
+
 
     <script>
         $(document).ready(function () {
@@ -102,7 +118,7 @@ else
                 $("#add-post-btn .my-flex-container").slideDown();
             });
         });
-    </script>    
+    </script>
 
 }
 

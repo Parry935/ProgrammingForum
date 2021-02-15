@@ -16,11 +16,22 @@ namespace Forum.Data.Repositories
             _db = db;
         }
 
-        public void addPostCount(int topicId)
+        //crate post
+        public void increasPostCount(int topicId)
         {
             var topic = _db.Topic.Find(topicId);
 
             topic.CountPosts += 1;
+
+            _db.Topic.Update(topic);
+        }
+
+        //delete post
+        public void decreasePostCount(int topicId)
+        {
+            var topic = _db.Topic.Find(topicId);
+
+            topic.CountPosts -= 1;
 
             _db.Topic.Update(topic);
         }

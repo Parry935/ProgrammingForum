@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Forum.Data;
 using Forum.Interfaces.Data;
 using Forum.Models;
+using Forum.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Forum.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ForumRole.Admin)]
     public class CategoryController : Controller
     {
         private IWebHostEnvironment _env;

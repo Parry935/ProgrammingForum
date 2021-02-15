@@ -31,5 +31,8 @@ namespace Forum.Models
         public string TopicTittle { get; set; }
 
         public int CountPosts { get; set; } = 0;
+
+        public bool Lock { get; set; } = false;
+        public bool Awarded { get; set; } = false;
     }
 }

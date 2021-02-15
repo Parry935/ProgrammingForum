@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.Areas.Admin.Controllers
 {
-    [Authorize(Roles = ForumRole.Admin)]
     [Area("Admin")]
+    [Authorize(Roles = ForumRole.Admin)]
     public class UsersController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
