@@ -85,7 +85,7 @@
                     <input type="hidden" asp-for="NewPost.CategoryId" />
                     <div class="form_item" style="width:60vw;">
                         <label asp-for="NewPost.PostMessage"></label>
-                        <textarea asp-for="NewPost.PostMessage" placeholder="Content" class="form-control" style="height:200px; font-weight:700;"></textarea>
+                        <textarea id="textarea" asp-for="NewPost.PostMessage" placeholder="Content" class="form-control" style="height:200px; font-weight:700;"></textarea>
                         <span asp-validation-for="NewPost.PostMessage" style="color: #FFA7A7; font-size:17px"></span>
                     </div>
                     <input type="submit" value="Post answer" class="btn-create"/>

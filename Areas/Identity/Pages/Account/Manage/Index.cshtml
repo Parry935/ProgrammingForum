@@ -2,10 +2,10 @@
 @model IndexModel
 
 <div class="top-container">
-    <h2>Edit user</h2>
+    <h2>My account  <i class="fas fa-user"></i></h2>
     <a asp-controller="Home" asp-action="Index" asp-area="CustomUser" class="btn-back">Back to forum</a>
 </div>
-<div style="border-top: 2px groove #ffffff"></div>
+<div style="border-top: 2px groove #ffffff; margin-bottom:10px"></div>
 
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 <form method="post" enctype="multipart/form-data" class="my-flex-container">
@@ -26,42 +26,24 @@
             <label asp-for="@Model.Input.Image"></label><br />
             <input type="file" name="files" class="btn-yel" />
         </div>
-        <input type="submit" value="Update" class="btn-create" />
+        <input type="submit" value="Update image" class="btn-create" />
     </div>
 </form>
+
+<div style="border-top: 2px groove #ffffff; margin: 40px 0 10px 0;"></div>
+<div style="margin: 20px;">
+    <h3>More account options:</h3>
+    <ul>
+        <li><a asp-page="Email" style="color:skyblue; font-weight:600;">Change email</a></li>
+        <li><a asp-page="ChangePassword" style="        color: skyblue;
+        font-weight: 600;">Change password</a></li>
+        <li><a asp-page="DeletePersonalData" style="color:red; font-weight:600;">Delete account</a></li>
+    </ul>
+</div>
+
 
 
 @section Scripts{
 
     <partial name="_ValidationScriptsPartial" />
 }
-
-
-@*@{
-        ViewData["Title"] = "Profile";
-        ViewData["ActivePage"] = ManageNavPages.Index;
-    }
-
-    <h4>@ViewData["Title"]</h4>
-    <partial name="_StatusMessage" model="Model.StatusMessage" />
-    <div class="row">
-        <div class="col-md-6">
-            <form id="profile-form" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Username"></label>
-                    <input asp-for="Username" class="form-control" disabled />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.PhoneNumber"></label>
-                    <input asp-for="Input.PhoneNumber" class="form-control" />
-                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                </div>
-                <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
-            </form>
-        </div>
-    </div>
-
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }*@

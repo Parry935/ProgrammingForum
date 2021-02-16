@@ -90,14 +90,24 @@ namespace Forum.Areas.CustomUser.Controllers
             return RedirectToAction("TopicDetails", "Topic", new { id = post.TopicId });
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             var post = await _unitOfWork.Post.GetFirstOrDefaultAsync(m => m.Id == id, "User");
 
-            if(_unitOfWork.Post.CheckIfPostIsFirst(post))
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            if (_unitOfWork.Post.CheckIfPostIsFirst(post))
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
 
             if (post.UserId != claim.Value && !User.IsInRole(ForumRole.Admin))

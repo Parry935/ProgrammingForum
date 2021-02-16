@@ -126,6 +126,9 @@ namespace Forum.Areas.CustomUser.Controllers
             _unitOfWork.Category.increasTopicAndPostCount(postToDb.CategoryId);
             await _unitOfWork.SaveAsync();
 
+            _unitOfWork.Topic.increasPostCount(postToDb.TopicId);
+            await _unitOfWork.SaveAsync();
+
 
             return RedirectToAction("Index", new { id = createTopic.Topic.CategoryId });
         }

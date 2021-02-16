@@ -23,7 +23,7 @@ namespace Forum.Data.Migrations
                 column: "CategoryId",
                 principalTable: "Category",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

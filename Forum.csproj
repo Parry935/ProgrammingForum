@@ -10,6 +10,12 @@
     <Compile Remove="Data\Migrations\20201202144608_ChangeUserModel.Designer.cs" />
     <Compile Remove="Data\Migrations\20201202144750_ChangeUserModel.cs" />
     <Compile Remove="Data\Migrations\20201202144750_ChangeUserModel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210216190815_Test.cs" />
+    <Compile Remove="Data\Migrations\20210216190815_Test.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210216192357_AddCategoryIdToTopicModel.cs" />
+    <Compile Remove="Data\Migrations\20210216192357_AddCategoryIdToTopicModel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210216205425_Test.cs" />
+    <Compile Remove="Data\Migrations\20210216205425_Test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

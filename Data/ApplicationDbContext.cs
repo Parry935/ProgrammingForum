@@ -18,5 +18,7 @@ namespace Forum.Data
         public DbSet<User> User { get; set; }
         public DbSet<Topic> Topic { get; set; }
         public DbSet<Post> Post { get; set; }
+        public DbSet<Reputation> Reputation { get; set; }
+        public DbSet<Report> Report { get; set; }
     }
 }
