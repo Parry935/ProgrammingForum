@@ -78,7 +78,7 @@
     {
         if (User.Identity.IsAuthenticated)
         {
-        <div id="add-post-btn">
+        <div id="add-post">
             <div class="my-flex-container">
                 <form method="post" asp-action="Create" asp-controller="Post" asp-area="CustomUser">
                     <input type="hidden" asp-for="NewPost.TopicId" />
@@ -88,10 +88,13 @@
                         <textarea asp-for="NewPost.PostMessage" placeholder="Content" class="form-control" style="height:200px; font-weight:700;"></textarea>
                         <span asp-validation-for="NewPost.PostMessage" style="color: #FFA7A7; font-size:17px"></span>
                     </div>
-                    <input type="submit" value="Post answer" class="btn-create" style="margin-top:20px;" />
+                    <input type="submit" value="Post answer" class="btn-create"/>
                 </form>
+                <button id="close-answer" class="btn-del" style="margin-top:10px;">Close</button>
             </div>
-            <button class="btn-yel">Add your answer</button>
+            <div class="flex-center">
+                <button id="add-answer" class="btn-yel">Add your answer</button>
+            </div>
         </div>
         }
     }
@@ -112,10 +115,15 @@ else
 
     <script>
         $(document).ready(function () {
-            $("#add-post-btn .my-flex-container").hide();
-            $("#add-post-btn button").click(function () {
-                $("#add-post-btn button").hide();
-                $("#add-post-btn .my-flex-container").slideDown();
+            $("#add-post .my-flex-container").hide();
+            $("#add-post #add-answer").click(function () {
+                $("#add-post #add-answer").hide();
+                $("#add-post .my-flex-container").slideDown();
+            });
+
+            $("#add-post #close-answer").click(function () {
+                $("#add-post .my-flex-container").slideUp();
+                $("#add-post #add-answer").show(500);
             });
         });
     </script>

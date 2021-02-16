@@ -8,9 +8,17 @@
     <a asp-controller="Home" asp-action="Index" asp-area="CustomUser" class="btn-back">Back to forums</a>
 </div>
 <div style="border-top: 2px groove #ffffff"></div>
+
+<div class="input-group input-group mb-2 mt-2">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fas fa-search"></i></span>
+    </div>
+    <input id="userFilter" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Search user..">
+</div>
+
 @if (Model.Count() > 0)
 {
-    <table class="table table-dark">
+    <table id="userTable" class="table table-dark">
         <thead>
             <tr>
                 <th>Nick</th>
@@ -48,3 +56,17 @@ else
     </div>
 }
 
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#userFilter").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#userTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+ }
