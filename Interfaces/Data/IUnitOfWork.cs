@@ -11,6 +11,7 @@ namespace Forum.Interfaces.Data
         ITopicRepository Topic { get; }
         IPostRepository Post { get; }
         IUserRepository User { get; }
+        ILikeRepository Like { get; }
 
         Task SaveAsync();
     }

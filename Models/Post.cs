@@ -36,5 +36,7 @@ namespace Forum.Models
         [DisplayName("Content")]
         [Required]
         public string PostMessage { get; set; }
+
+        public virtual ICollection<Like> Likes { get; set; }
     }
 }

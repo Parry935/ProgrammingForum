@@ -148,9 +148,9 @@ namespace Forum.Areas.CustomUser.Controllers
                 return NotFound();
             }
 
-            var postList = await _unitOfWork.Post.GetAllAsync(m => m.TopicId == topicFromDb.Id, "User,Topic,Category", m=>m.OrderBy(x=>x.PostDate));
+            var postList = await _unitOfWork.Post.GetAllAsync(m => m.TopicId == topicFromDb.Id, "User,Topic,Category,Likes", m=>m.OrderBy(x=>x.PostDate));
 
-            PostsInTopicAndNewPostVM createPost = new PostsInTopicAndNewPostVM()
+            PostsInTopicAndNewPostVM postVM = new PostsInTopicAndNewPostVM()
             {
                 Posts = postList,
                 NewPost = new Post()
@@ -160,7 +160,7 @@ namespace Forum.Areas.CustomUser.Controllers
                 }
             };
 
-            return View(createPost);
+            return View(postVM);
         }
     }
 }

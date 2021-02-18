@@ -37,7 +37,7 @@ namespace Forum.Areas.Admin.Controllers
 
             _unitOfWork.Topic.Remove(topic);
             await _unitOfWork.SaveAsync();
-            return Json(new { success = true });
+            return Json(new { success = true});
         }
 
         //API call - Lock topic

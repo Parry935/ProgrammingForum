@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using static Forum.Utility.Enums;
 
 namespace Forum.Models
 {
-    public class Reputation
+    public class Like
     {
         [Key]
         public int Id { get; set; }
@@ -22,7 +21,5 @@ namespace Forum.Models
 
         [ForeignKey("PostId")]
         public virtual Post Post { get; set; }
-
-        public Rating Rating { get; set;}
     }
 }

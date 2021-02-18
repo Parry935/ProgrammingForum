@@ -16,6 +16,10 @@
     <Compile Remove="Data\Migrations\20210216192357_AddCategoryIdToTopicModel.Designer.cs" />
     <Compile Remove="Data\Migrations\20210216205425_Test.cs" />
     <Compile Remove="Data\Migrations\20210216205425_Test.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210217233954_ChangeReputationModelToLikeModel.cs" />
+    <Compile Remove="Data\Migrations\20210217233954_ChangeReputationModelToLikeModel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210218023231_Test.cs" />
+    <Compile Remove="Data\Migrations\20210218023231_Test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
