@@ -43,7 +43,7 @@
                             <partial name="_DateFormatPartial" model="@item.LastPost.PostDate" />
                             <br />
                             <img src="@item.LastPost.User.Image" style="width:35px; display: inline-block; border-radius: 15px; margin: auto" />
-                            <span style="margin-left:5px;">@Html.DisplayFor(m => item.LastPost.User.UserName)</span>
+                            <a style="color:#B9F98A; margin-left:5px;" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@item.LastPost.User.UserName">@Html.DisplayFor(m => item.LastPost.User.UserName)</a>
                         }
                         else
                         {

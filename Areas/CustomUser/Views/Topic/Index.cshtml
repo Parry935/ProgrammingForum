@@ -56,7 +56,10 @@
                             <i class="fas fa-star" style="color:yellow; margin-left:5px;"></i>
                         }
                         <br />
-                        <p>Created <partial name="_DateFormatPartial" model="@item.Topic.TopicDate" /> by @Html.DisplayFor(m => item.Topic.User.UserName)</p>
+                        <p>
+                            Created <partial name="_DateFormatPartial" model="@item.Topic.TopicDate" /> by
+                            <a style="color:#B9F98A;" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@item.Topic.User.UserName">@Html.DisplayFor(m => item.Topic.User.UserName)</a>
+                        </p>
                     </td>
                     <td style="text-align:center; vertical-align: middle;">
                         @Html.DisplayFor(m => item.Topic.CountPosts)
@@ -67,7 +70,7 @@
                             <partial name="_DateFormatPartial" model="@item.Post.PostDate" />
                             <br />
                             <img src="@item.Post.User.Image" style="width:35px; display:inline-block; border-radius:15px; margin:auto" />
-                            <span style="margin-left:5px;">@Html.DisplayFor(m => item.Post.User.UserName)</span>
+                            <a style="color:#B9F98A; margin-left:5px;" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@item.Post.User.UserName">@Html.DisplayFor(m => item.Post.User.UserName)</a>
                         }
                     </td>
 

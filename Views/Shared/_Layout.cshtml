@@ -1,4 +1,6 @@
 ﻿@using Forum.Utility
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +38,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="Admin" asp-controller="Report" asp-action="Index">Reports</a>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@User.Identity.Name">My profile</a>
                             </li>
                         }
                     </ul>

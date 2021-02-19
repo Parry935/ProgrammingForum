@@ -15,7 +15,7 @@
         <img src="@Model.User.Image" style="width:70px; display:block; border-radius:15px; margin:auto" />
         <partial name="_DateFormatPartial" model="@Model.PostDate" />
         <br />
-        @Html.DisplayFor(m => Model.User.UserName)<br />
+        <a style="color:#B9F98A;" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@Model.User.UserName">@Html.DisplayFor(m => m.User.UserName)</a><br />
         @if (Model.User.UserName == ForumRole.AdminNickname)
         {
             <span style="background:yellow; color:black; padding:2px; font-size:12px; border-radius: 2px;">@ForumRole.Admin</span>

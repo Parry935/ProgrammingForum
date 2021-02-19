@@ -30,7 +30,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(m => item.UserName)</td>
+                    <td><a style="color:#B9F98A;" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@item.UserName">@Html.DisplayFor(m => item.UserName)</a></td>
                     <td>@Html.DisplayFor(m => item.Email)</td>
                     <td>
                         @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)

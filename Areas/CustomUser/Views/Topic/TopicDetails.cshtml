@@ -28,7 +28,7 @@
                     <img src="@item.User.Image" style="width:70px; display:block; border-radius:15px; margin:auto" />
                     <partial name="_DateFormatPartial" model="@item.PostDate" />
                     <br />
-                    @Html.DisplayFor(m => item.User.UserName)<br />
+                    <a style="color:#B9F98A;" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@item.User.UserName">@Html.DisplayFor(m => item.User.UserName)</a><br />
                     @if (item.User.UserName == ForumRole.AdminNickname)
                     {
                         <span style="background:yellow; color:black; padding:2px; font-size:12px; border-radius: 2px;">@ForumRole.Admin</span>
@@ -40,7 +40,7 @@
                         </div>
                     }
 
-                    </td>
+                </td>
                     <td>
                         <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:230px; font-weight:700;"></textarea>
                     </td>
@@ -64,17 +64,17 @@
                             <img src="@item.User.Image" style="width: 70px; display: block; border-radius: 15px; margin: auto" />
                             <partial name="_DateFormatPartial" model="@item.PostDate" />
                             <br />
-                            @Html.DisplayFor(m => item.User.UserName)<br />
+                            <a style="color:#B9F98A;" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@item.User.UserName">@Html.DisplayFor(m => item.User.UserName)</a><br />
                             @if (item.User.UserName == ForumRole.AdminNickname)
                             {
                                 <span style="background:yellow; color:black; padding:2px; font-size:12px; border-radius: 2px;">@ForumRole.Admin</span>
                             }
                             @if (item.User.Id == UserManager.GetUserId(User) || User.IsInRole(ForumRole.Admin))
                             {
-                        <div style="display:flex; justify-content:space-between; margin-top:7px;">
-                            <a asp-action="Edit" asp-controller="Post" asp-area="CustomUser" asp-route-id="@item.Id" class="btn-create" style="padding:3px 10px;"><i class="far fa-edit"></i></a>
-                            <a asp-action="Delete" asp-controller="Post" asp-area="CustomUser" asp-route-id="@item.Id" class="btn-del" style="padding: 3px 10px;"><i class="fas fa-trash-alt"></i></a>
-                        </div>
+                                <div style="display:flex; justify-content:space-between; margin-top:7px;">
+                                    <a asp-action="Edit" asp-controller="Post" asp-area="CustomUser" asp-route-id="@item.Id" class="btn-create" style="padding:3px 10px;"><i class="far fa-edit"></i></a>
+                                    <a asp-action="Delete" asp-controller="Post" asp-area="CustomUser" asp-route-id="@item.Id" class="btn-del" style="padding: 3px 10px;"><i class="fas fa-trash-alt"></i></a>
+                                </div>
                             }
                         </td>
                         <td>

@@ -1,0 +1,99 @@
+﻿@model Forum.ViewModel.UserProfileVM
+@using Microsoft.AspNetCore.Identity
+@using Forum.Utility
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="top-container">
+    <h2><i class="fas fa-user"></i> @Model.User.UserName - profile</h2>
+    <a asp-controller="Home" asp-action="Index" asp-area="CustomUser" class="btn-back">Back to forum</a>
+</div>
+<div style="border-top: 2px groove #ffffff; margin-bottom:10px"></div>
+
+<div class="my-flex-container">
+    <div>
+        <img src="@Model.User.Image" style="width:150px;height:auto; border-radius:15px;" /><br />
+        @if (Model.User.UserName == ForumRole.AdminNickname)
+        {
+            <div class="flex-center" style="margin-top:10px;">
+                <span style="background:yellow; color:black; padding:5px; font-size:12px; border-radius: 5px; width:150px; text-align:center; font-weight:600;"> <i class="fas fa-user-cog"></i> @ForumRole.Admin</span>
+            </div>
+        }
+        @if (UserManager.GetUserId(User) != Model.User.Id)
+        {
+            <div class="flex-center" style="margin-top:10px;">
+                <button class="btn-create" style="padding:5px 15px;"><i class="fas fa-envelope"></i> Send message</button>
+            </div>
+        }
+    </div>
+    <div>
+        <table class="table table-dark" style="text-align:center;border-collapse:separate; border-radius: 15px; border: 2px green solid;">
+            <thead>
+                <tr>
+                    <th colspan="2">Information about @Model.User.UserName</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Topics</th>
+                    <td> @Html.DisplayFor(m => m.CountTopics)</td>
+                </tr>
+                <tr>
+                    <th>Posts</th>
+                    <td> @Html.DisplayFor(m => m.CountPosts)</td>
+                </tr>
+                <tr>
+                    <th>Reputation</th>
+                    <td style="color:#00ff00;"> +@Html.DisplayFor(m => m.Reputation)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="border-top: 2px groove #ffffff; margin: 40px 0 10px 0;"></div>
+<div style="margin: 20px;">
+    <h3>Recent posts:</h3>
+    @if (Model.RecentPosts.Count() > 0)
+    {
+        <table class="table table-dark">
+            <tbody>
+                @foreach (var item in Model.RecentPosts)
+                {
+                        <tr>
+                            <td colspan="3">
+                                <h5>To topic:
+                                <a asp-action="TopicDetails" asp-controller="Topic" asp-area="CustomUser" asp-route-id="@item.TopicId" style=" margin-left:25px; color:#B9F98A" class="title">@Html.DisplayFor(m => item.Topic.TopicTittle)</a></h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 110px; text-align: center;">
+                                <img src="@item.User.Image" style="width:70px; display:block; border-radius:15px; margin:auto" />
+                                <partial name="_DateFormatPartial" model="@item.PostDate" />
+                                <br />
+                                @Html.DisplayFor(m => item.User.UserName)<br />
+                            </td>
+                            <td>
+                                <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:230px; font-weight:700;"></textarea>
+                            </td>
+                            <td style="width: 80px;">
+                                <div>
+                                    <span class="flex-center" style="font-size:20px;">@item.Likes.Count()</span>
+                                    <div class="flex-center" style="margin-top:5px;">
+                                        <i style="font-size: 20px; color: #B0E2BB;" class="fas fa-thumbs-up"></i>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                }
+            </tbody>
+        </table>       
+    }
+    else
+    {
+        <span>No posts</span>
+    }
+</div>

@@ -33,7 +33,7 @@
             @foreach (var item in Model)
             {
             <tr>
-                <td>@Html.DisplayFor(m => item.User.UserName)</td>
+                <td><a style="color:#B9F98A;" asp-area="CustomUser" asp-controller="User" asp-action="Index" asp-route-name="@item.User.UserName">@Html.DisplayFor(m => item.User.UserName)</a></td>
                 <td><partial name="_DateFormatPartial" model="item.Date"></td>
                 <td>@Html.DisplayFor(m => item.Reason)</td>
                 <td>
