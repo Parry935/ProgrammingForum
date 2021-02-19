@@ -24,5 +24,7 @@ namespace Forum.Models
 
         [Required]
         public string Reason { get; set; }
+
+        public DateTime Date { get; set; } = DateTime.Now;
     }
 }

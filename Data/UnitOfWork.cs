@@ -23,6 +23,8 @@ namespace Forum.Data
 
         public ILikeRepository Like { get; private set; }
 
+        public IReportRepository Report { get; private set; }
+
 
         public UnitOfWork(ApplicationDbContext dbContext)
         {
@@ -33,6 +35,7 @@ namespace Forum.Data
             Post = new PostRepository(_dbContext);
             User = new UserRpository(_dbContext);
             Like = new LikeRepository(_dbContext);
+            Report = new ReportRepository(_dbContext);
         }
 
         public void Dispose()

@@ -44,10 +44,16 @@
                     <td>
                         <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:230px; font-weight:700;"></textarea>
                     </td>
-                    <td style="width: 50px;">
+                    <td style="width: 80px;">
                         <div class="@("partialLikes" + item.Id)">
                             <partial name="_LikePartial" model="@item" />
                         </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div style="margin-top:130px">
+                                <button class="btn-grey" style="padding: 1px 5px" onclick="CreateReport(@item.Id)">Report</button>
+                            </div>
+                        }
                     </td>
             </tr>
                 }
@@ -74,10 +80,17 @@
                         <td>
                             <textarea asp-for="@item.PostMessage" readonly class="form-control" style="height:230px; font-weight:700;"></textarea>
                         </td>
-                        <td style="width: 50px;">
+                        <td style="width: 80px;">
                             <div class="@("partialLikes" + item.Id)">
                                 <partial name="_LikePartial" model="@item" />
                             </div>
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div style="margin-top:130px" class="flex-center">
+                                    <button class="btn-grey" style="padding: 1px 5px" onclick="CreateReport(@item.Id)">Report</button>
+                                </div>
+                            }
                         </td>
                     </tr>
                 }
@@ -176,6 +189,47 @@ else
                     }
                 });
             }
+
+            function CreateReport(id) {
+
+                swal({
+                    title: "Pass reason for report this post",
+                    buttons: {
+                        cancel: "Cancel",
+                        confirm: "Confirm",
+                    },
+                    content: {
+                        element: "input",
+                        attributes: {
+                            placeholder: "Reason..",
+                            type: "text",
+                        }
+                    },
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                }).then((message) => {
+                    if (message) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Admin/Report/Create/",
+                            data: { 'id': id, 'reason': message },
+                            success: function (data) {
+                                if (data.success) {
+                                    swal({
+                                        title: "Report sent",
+                                        icon: "success",
+                                        button: "OK",
+                                    })
+                                }
+                                else {
+                                   swal("You have already sent report for this post")
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
 
     </script>
 

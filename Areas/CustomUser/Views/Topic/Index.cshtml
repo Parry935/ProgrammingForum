@@ -90,7 +90,7 @@
                     {
                         <button class="btn-del" onclick="LockTopic(@item.Topic.Id)"><i class="fas fa-unlock"></i></button>
                     }
-                    <button class="btn-del" onclick="DeleteConfirm(@item.Topic.Id)"><i class="fas fa-trash-alt"></i></button>
+                    <button class="btn-del" onclick="DeleteTopic(@item.Topic.Id)"><i class="fas fa-trash-alt"></i></button>
                 </td>
                     }
                 </tr>
@@ -118,7 +118,7 @@ else
             });
         });
 
-        function DeleteConfirm(id) {
+        function DeleteTopic(id) {
 
             swal({
                 title: "Are you sure you want delete this topic?",

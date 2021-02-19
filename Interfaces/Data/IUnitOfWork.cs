@@ -12,6 +12,7 @@ namespace Forum.Interfaces.Data
         IPostRepository Post { get; }
         IUserRepository User { get; }
         ILikeRepository Like { get; }
+        IReportRepository Report { get; }
 
         Task SaveAsync();
     }

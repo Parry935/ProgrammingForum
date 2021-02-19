@@ -14,11 +14,11 @@ namespace BookShop.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = ForumRole.Admin)]
-    public class UsersController : Controller
+    public class UserController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public UsersController(IUnitOfWork unitOfWork)
+        public UserController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
