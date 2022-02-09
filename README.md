@@ -1,4 +1,4 @@
-# ProgrammingForum
+# Programming forum
 Application provides basic functions of a discussion forum.
 
 ## Tech stack:
