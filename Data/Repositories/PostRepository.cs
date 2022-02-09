@@ -20,7 +20,10 @@ namespace Forum.Data.Repositories
 
         public bool CheckIfPostIsFirst(Post post)
         {
-            var firstPost = _db.Post.Where(m => m.TopicId == post.TopicId).OrderBy(m => m.PostDate).FirstOrDefault();
+            var firstPost = _db.Post
+                .Where(m => m.TopicId == post.TopicId)
+                .OrderBy(m => m.PostDate)
+                .FirstOrDefault();
 
             if (firstPost == null || (firstPost.Id == post.Id))
                 return true;
@@ -30,12 +33,20 @@ namespace Forum.Data.Repositories
 
         public async Task<Post> GetLastPostForCategory(int categoryId)
         {
-            return await _db.Post.Where(m => m.CategoryId == categoryId).Include(m => m.User).Include(m => m.Topic).OrderByDescending(m => m.PostDate).FirstOrDefaultAsync();
+            return await _db.Post
+                .Where(m => m.CategoryId == categoryId)
+                .Include(m => m.User).Include(m => m.Topic)
+                .OrderByDescending(m => m.PostDate)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Post> GetLastPostForTopic(int topicId)
         {
-            return await _db.Post.Where(m => m.TopicId == topicId).Include(m => m.User).OrderByDescending(m => m.PostDate).FirstOrDefaultAsync();
+            return await _db.Post
+                .Where(m => m.TopicId == topicId)
+                .Include(m => m.User)
+                .OrderByDescending(m => m.PostDate)
+                .FirstOrDefaultAsync();
         }
 
         public void UpdatePostContent(int id, string postMessage)

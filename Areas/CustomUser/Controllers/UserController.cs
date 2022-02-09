@@ -21,16 +21,17 @@ namespace Forum.Areas.CustomUser.Controllers
 
         public async Task<IActionResult> Index(string name)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(m=>m.UserName == name);
+            var user = await _unitOfWork.User
+                .GetFirstOrDefaultAsync(m=>m.UserName == name);
 
             if(user == null)
-            {
                 return NotFound();
-            }
 
-            var userPosts = await _unitOfWork.Post.GetAllAsync(m => m.UserId == user.Id, "Topic,Likes", m=>m.OrderByDescending(x =>x.PostDate));
+            var userPosts = await _unitOfWork.Post
+                .GetAllAsync(m => m.UserId == user.Id, "Topic,Likes", m=>m.OrderByDescending(x =>x.PostDate));
 
-            var cntUserTopics = _unitOfWork.Topic.GetAllAsync(m => m.UserId == user.Id).Result.Count();
+            var cntUserTopics = _unitOfWork.Topic
+                .GetAllAsync(m => m.UserId == user.Id).Result.Count();
 
             var cntUserPosts = userPosts.Count();
 
@@ -49,7 +50,7 @@ namespace Forum.Areas.CustomUser.Controllers
                 Reputation = reputation,
                 RecentPosts = userPosts.Take(3)
             };
-
+             
             return View(userProfile);
         }
     }

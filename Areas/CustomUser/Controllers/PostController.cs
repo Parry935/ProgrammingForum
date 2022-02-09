@@ -46,10 +46,10 @@ namespace Forum.Areas.CustomUser.Controllers
             _unitOfWork.Post.Insert(postToDb);
             await _unitOfWork.SaveAsync();
 
-            _unitOfWork.Category.increasPostCount(postToDb.CategoryId);
+            _unitOfWork.Category.IncreasePostCount(postToDb.CategoryId);
             await _unitOfWork.SaveAsync();
 
-            _unitOfWork.Topic.increasPostCount(postToDb.TopicId);
+            _unitOfWork.Topic.IncreasePostCount(postToDb.TopicId);
             await _unitOfWork.SaveAsync();
 
 
@@ -61,7 +61,8 @@ namespace Forum.Areas.CustomUser.Controllers
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var post = await _unitOfWork.Post.GetFirstOrDefaultAsync(m => m.Id == id, "User");
+            var post = await _unitOfWork.Post
+                .GetFirstOrDefaultAsync(m => m.Id == id, "User");
 
             if (post.UserId != claim.Value && !User.IsInRole(ForumRole.Admin))
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
@@ -75,14 +76,10 @@ namespace Forum.Areas.CustomUser.Controllers
         public async Task<IActionResult> Edit(Post post)
         {
             if (post == null)
-            {
                 return NotFound();
-            }
 
             if (!ModelState.IsValid)
-            {
                 return View(post);
-            }
 
             _unitOfWork.Post.UpdatePostContent(post.Id,post.PostMessage);
             await _unitOfWork.SaveAsync();
@@ -93,19 +90,16 @@ namespace Forum.Areas.CustomUser.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if(id == null)
-            {
                 return NotFound();
-            }
 
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var post = await _unitOfWork.Post.GetFirstOrDefaultAsync(m => m.Id == id, "User");
+            var post = await _unitOfWork.Post
+                .GetFirstOrDefaultAsync(m => m.Id == id, "User");
 
             if (post == null)
-            {
                 return NotFound();
-            }
 
             if (_unitOfWork.Post.CheckIfPostIsFirst(post))
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
@@ -122,14 +116,12 @@ namespace Forum.Areas.CustomUser.Controllers
         public async Task<IActionResult> Delete(Post post)
         {
             if (post == null)
-            {
                 return NotFound();
-            }
 
-            _unitOfWork.Category.decreasePostCount(post.CategoryId);
+            _unitOfWork.Category.DecreasePostCount(post.CategoryId);
             await _unitOfWork.SaveAsync();
 
-            _unitOfWork.Topic.decreasePostCount(post.TopicId);
+            _unitOfWork.Topic.DecreasePostCount(post.TopicId);
             await _unitOfWork.SaveAsync();
 
             _unitOfWork.Post.RemoveById(post.Id);

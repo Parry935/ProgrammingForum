@@ -27,12 +27,11 @@ namespace Forum.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var topic = await _unitOfWork.Topic.GetByIdAsync(id);
-            if (topic == null)
-            {
-                return Json(new { success = false });
-            }
 
-            _unitOfWork.Category.decreaseTopicAndPostCount(topic.CategoryId, topic.Id);
+            if (topic == null)
+                return Json(new { success = false });
+
+            _unitOfWork.Category.DecreaseTopicAndPostCount(topic.CategoryId, topic.Id);
             await _unitOfWork.SaveAsync();
 
             _unitOfWork.Topic.Remove(topic);
@@ -45,10 +44,10 @@ namespace Forum.Areas.Admin.Controllers
         public async Task<IActionResult> LockTopic(int id)
         {
             var topic = await _unitOfWork.Topic.GetByIdAsync(id);
+
             if (topic == null)
-            {
                 return Json(new { success = false });
-            }
+
             topic.Lock = true;
             await _unitOfWork.SaveAsync();
             return Json(new { success = true });
@@ -59,10 +58,10 @@ namespace Forum.Areas.Admin.Controllers
         public async Task<IActionResult> UnlockTopic(int id)
         {
             var topic = await _unitOfWork.Topic.GetByIdAsync(id);
+
             if (topic == null)
-            {
                 return Json(new { success = false });
-            }
+
             topic.Lock = false;
             await _unitOfWork.SaveAsync();
             return Json(new { success = true });
@@ -73,10 +72,10 @@ namespace Forum.Areas.Admin.Controllers
         public async Task<IActionResult> AddAwardTopic(int id)
         {
             var topic = await _unitOfWork.Topic.GetByIdAsync(id);
+
             if (topic == null)
-            {
                 return Json(new { success = false });
-            }
+
             topic.Awarded = true;
             await _unitOfWork.SaveAsync();
             return Json(new { success = true });
@@ -87,10 +86,10 @@ namespace Forum.Areas.Admin.Controllers
         public async Task<IActionResult> RemoveAwardTopic(int id)
         {
             var topic = await _unitOfWork.Topic.GetByIdAsync(id);
+
             if (topic == null)
-            {
                 return Json(new { success = false });
-            }
+
             topic.Awarded = false;
             await _unitOfWork.SaveAsync();
             return Json(new { success = true });

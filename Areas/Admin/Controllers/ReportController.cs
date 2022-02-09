@@ -25,7 +25,8 @@ namespace Forum.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var reports = await _unitOfWork.Report.GetAllAsync(includeProperties: "Post,User");
+            var reports = await _unitOfWork.Report
+                .GetAllAsync(includeProperties: "Post,User");
 
             return View(reports);
         }
@@ -37,12 +38,11 @@ namespace Forum.Areas.Admin.Controllers
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var report = await _unitOfWork.Report.GetFirstOrDefaultAsync(m => m.PostId == id && m.UserId == claim.Value);
+            var report = await _unitOfWork.Report
+                .GetFirstOrDefaultAsync(m => m.PostId == id && m.UserId == claim.Value);
 
             if(report != null)
-            {
                 return Json(new { success = false});
-            }
 
             var reportToDb = new Report()
             {
@@ -61,11 +61,11 @@ namespace Forum.Areas.Admin.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var report = await _unitOfWork.Report.GetByIdAsync(id);
+            var report = await _unitOfWork.Report
+                .GetByIdAsync(id);
+
             if (report == null)
-            {
                 return Json(new { success = false });
-            }
 
             _unitOfWork.Report.Remove(report);
             await _unitOfWork.SaveAsync();

@@ -28,13 +28,13 @@ namespace Forum.Areas.CustomUser.Controllers
         public async Task<IActionResult> Index(int? id)
         {
             if(id == null)
-            {
                 return NotFound();
-            }
 
-            var topicsInCategory = await _unitOfWork.Topic.GetAllAsync(m => m.CategoryId == id, "User");
+            var topicsInCategory = await _unitOfWork.Topic
+                .GetAllAsync(m => m.CategoryId == id, "User");
 
-            var caregoryFromDB = await _unitOfWork.Category.GetFirstOrDefaultAsync(m => m.Id == id);
+            var caregoryFromDB = await _unitOfWork.Category
+                .GetFirstOrDefaultAsync(m => m.Id == id);
 
             var topiscWithLastPost = new List<TopicWithPostVM>();
 
@@ -43,14 +43,18 @@ namespace Forum.Areas.CustomUser.Controllers
                 topiscWithLastPost.Add(new TopicWithPostVM()
                 {
                     Topic = topic,
-                    Post = await _unitOfWork.Post.GetLastPostForTopic(topic.Id)
+                    Post = await _unitOfWork.Post
+                    .GetLastPostForTopic(topic.Id)
                 }
                 );
             }
 
             TopicsVM topicsVM = new TopicsVM()
             {
-                TopicsWithLastPosts = topiscWithLastPost.OrderByDescending(m => m.Topic.Awarded).ThenByDescending(m => m.Post.PostDate).ToList(),
+                TopicsWithLastPosts = topiscWithLastPost
+                .OrderByDescending(m => m.Topic.Awarded)
+                .ThenByDescending(m => m.Post.PostDate)
+                .ToList(),
                 Category = caregoryFromDB
             };
 
@@ -61,9 +65,7 @@ namespace Forum.Areas.CustomUser.Controllers
         public async Task<IActionResult> Create(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             TopicWithPostVM createTopic = new TopicWithPostVM()
             {
@@ -71,7 +73,8 @@ namespace Forum.Areas.CustomUser.Controllers
                 Post = new Post()
             };
 
-            var caregoryFromDB = await _unitOfWork.Category.GetFirstOrDefaultAsync(m => m.Id == id);
+            var caregoryFromDB = await _unitOfWork.Category
+                .GetFirstOrDefaultAsync(m => m.Id == id);
 
             createTopic.Topic.Category = caregoryFromDB;
             createTopic.Topic.CategoryId = caregoryFromDB.Id;
@@ -86,9 +89,7 @@ namespace Forum.Areas.CustomUser.Controllers
         public async Task<IActionResult> Create(TopicWithPostVM createTopic)
         {
             if (!ModelState.IsValid)
-            {
                 return View(createTopic);
-            }
 
 
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
@@ -96,7 +97,8 @@ namespace Forum.Areas.CustomUser.Controllers
 
             DateTime timeNow = DateTime.Now;
 
-            var categoryFromDB = await _unitOfWork.Category.GetFirstOrDefaultAsync(m => m.Id == createTopic.Topic.CategoryId);
+            var categoryFromDB = await _unitOfWork.Category
+                .GetFirstOrDefaultAsync(m => m.Id == createTopic.Topic.CategoryId);
 
 
             Topic topicToDb = new Topic()
@@ -123,10 +125,10 @@ namespace Forum.Areas.CustomUser.Controllers
             _unitOfWork.Post.Insert(postToDb);
             await _unitOfWork.SaveAsync();
 
-            _unitOfWork.Category.increasTopicAndPostCount(postToDb.CategoryId);
+            _unitOfWork.Category.IncreaseTopicAndPostCount(postToDb.CategoryId);
             await _unitOfWork.SaveAsync();
 
-            _unitOfWork.Topic.increasPostCount(postToDb.TopicId);
+            _unitOfWork.Topic.IncreasePostCount(postToDb.TopicId);
             await _unitOfWork.SaveAsync();
 
 
@@ -137,18 +139,16 @@ namespace Forum.Areas.CustomUser.Controllers
         public async Task<IActionResult> TopicDetails(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var topicFromDb = await _unitOfWork.Topic.GetFirstOrDefaultAsync(m => m.Id == id);
+            var topicFromDb = await _unitOfWork.Topic
+                .GetFirstOrDefaultAsync(m => m.Id == id);
 
             if (topicFromDb == null)
-            {
                 return NotFound();
-            }
 
-            var postList = await _unitOfWork.Post.GetAllAsync(m => m.TopicId == topicFromDb.Id, "User,Topic,Category,Likes", m=>m.OrderBy(x=>x.PostDate));
+            var postList = await _unitOfWork.Post
+                .GetAllAsync(m => m.TopicId == topicFromDb.Id, "User,Topic,Category,Likes", m=>m.OrderBy(x=>x.PostDate));
 
             PostsInTopicAndNewPostVM postVM = new PostsInTopicAndNewPostVM()
             {

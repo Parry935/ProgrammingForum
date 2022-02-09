@@ -17,7 +17,7 @@ namespace Forum.Data.Repositories
         }
 
         //crate post
-        public void increasPostCount(int topicId)
+        public void IncreasePostCount(int topicId)
         {
             var topic = _db.Topic.Find(topicId);
 
@@ -27,7 +27,7 @@ namespace Forum.Data.Repositories
         }
 
         //delete post
-        public void decreasePostCount(int topicId)
+        public void DecreasePostCount(int topicId)
         {
             var topic = _db.Topic.Find(topicId);
 

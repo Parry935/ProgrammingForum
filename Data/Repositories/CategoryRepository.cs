@@ -17,7 +17,7 @@ namespace Forum.Data.Repositories
         }
 
         //crate post
-        public void increasPostCount(int categoryId)
+        public void IncreasePostCount(int categoryId)
         {
             var category = _db.Category.Find(categoryId);
 
@@ -27,7 +27,7 @@ namespace Forum.Data.Repositories
         }
 
         //create topic
-        public void increasTopicAndPostCount(int categoryId)
+        public void IncreaseTopicAndPostCount(int categoryId)
         {
             var category = _db.Category.Find(categoryId);
 
@@ -38,7 +38,7 @@ namespace Forum.Data.Repositories
         }
 
         //delete post
-        public void decreasePostCount(int categoryId)
+        public void DecreasePostCount(int categoryId)
         {
             var category = _db.Category.Find(categoryId);
 
@@ -48,7 +48,7 @@ namespace Forum.Data.Repositories
         }
 
         //delete topic
-        public void decreaseTopicAndPostCount(int categoryId, int topicId)
+        public void DecreaseTopicAndPostCount(int categoryId, int topicId)
         {
             var category = _db.Category.Find(categoryId);
 

@@ -36,11 +36,11 @@ namespace Forum.Controllers
                 homeVM.Add(new HomeVM()
                 {
                     Category = category,
-                    LastPost = await _unitOfWork.Post.GetLastPostForCategory(category.Id)
+                    LastPost = await _unitOfWork.Post
+                    .GetLastPostForCategory(category.Id)
                 }
                 );
             }
-
 
             return View(homeVM);
         }

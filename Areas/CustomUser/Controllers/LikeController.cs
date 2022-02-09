@@ -30,11 +30,11 @@ namespace Forum.Areas.CustomUser.Controllers
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var post = await _unitOfWork.Post.GetByIdAsync(id);
+            var post = await _unitOfWork.Post
+                .GetByIdAsync(id);
+
             if (post == null)
-            {
                 return Json(new { success = false });
-            }
 
             Like like = new Like
             {
@@ -55,11 +55,11 @@ namespace Forum.Areas.CustomUser.Controllers
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var like = await _unitOfWork.Like.GetFirstOrDefaultAsync(m => m.PostId == id && m.UserId == claim.Value);
+            var like = await _unitOfWork.Like
+                .GetFirstOrDefaultAsync(m => m.PostId == id && m.UserId == claim.Value);
+
             if (like == null)
-            {
                 return Json(new { success = false });
-            }
 
             _unitOfWork.Like.Remove(like);
             await _unitOfWork.SaveAsync();
@@ -69,7 +69,8 @@ namespace Forum.Areas.CustomUser.Controllers
         // GET - partial view
         public async Task<ActionResult> GetLikes(int id)
         {
-            var post = await _unitOfWork.Post.GetFirstOrDefaultAsync(m => m.Id == id, "Likes");
+            var post = await _unitOfWork.Post
+                .GetFirstOrDefaultAsync(m => m.Id == id, "Likes");
 
             return PartialView("_LikePartial", post);
         }

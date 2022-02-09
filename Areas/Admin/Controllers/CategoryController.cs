@@ -29,7 +29,8 @@ namespace Forum.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var categories = await _unitOfWork.Category.GetAllAsync();
+            var categories = await _unitOfWork.Category
+                .GetAllAsync();
 
             return View(categories);
         }
@@ -47,10 +48,7 @@ namespace Forum.Areas.Admin.Controllers
         public async Task<IActionResult> Create(Category category)
         {
             if (!ModelState.IsValid)
-            {
                 return View(category);
-            }
-
 
             _unitOfWork.Category.Insert(category);
             await _unitOfWork.SaveAsync();
@@ -58,7 +56,8 @@ namespace Forum.Areas.Admin.Controllers
             string webRootPath = _env.WebRootPath;
             var files = HttpContext.Request.Form.Files;
 
-            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(category.Id);
+            var categoryFromDB = await _unitOfWork.Category
+                .GetByIdAsync(category.Id);
 
             if (files.Count > 0)
             {
@@ -90,7 +89,8 @@ namespace Forum.Areas.Admin.Controllers
             if (id == null)
                 return NotFound();
 
-            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(id.Value);
+            var categoryFromDB = await _unitOfWork.Category
+                .GetByIdAsync(id.Value);
 
             if (categoryFromDB == null)
                 return NotFound();
@@ -105,14 +105,10 @@ namespace Forum.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(Category category)
         {
             if (category == null)
-            {
                 return NotFound();
-            }
 
             if (!ModelState.IsValid)
-            {
                 return View(category);
-            }
 
             string webRootPath = _env.WebRootPath;
             var files = HttpContext.Request.Form.Files;
@@ -123,21 +119,19 @@ namespace Forum.Areas.Admin.Controllers
             if (files.Count > 0)
             {
                 var uploads = Path.Combine(webRootPath, @"img\category_img");
-                var extension_new = Path.GetExtension(files[0].FileName);
+                var extension = Path.GetExtension(files[0].FileName);
 
                 var imgToDel = Path.Combine(webRootPath, categoryFromDB.Image.TrimStart('\\'));
 
                 if (System.IO.File.Exists(imgToDel))
-                {
                     System.IO.File.Delete(imgToDel);
-                }
 
-                using (var flieStream = new FileStream(Path.Combine(uploads, category.Id + extension_new), FileMode.Create))
+                using (var flieStream = new FileStream(Path.Combine(uploads, category.Id + extension), FileMode.Create))
                 {
                     files[0].CopyTo(flieStream);
                 }
 
-                categoryFromDB.Image = @"\img\category_img\" + category.Id + extension_new;
+                categoryFromDB.Image = @"\img\category_img\" + category.Id + extension;
             }
 
             categoryFromDB.Name = category.Name;
@@ -155,7 +149,8 @@ namespace Forum.Areas.Admin.Controllers
             if (id == null)
                 return NotFound();
 
-            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(id.Value);
+            var categoryFromDB = await _unitOfWork.Category
+                .GetByIdAsync(id.Value);
 
             if (categoryFromDB == null)
                 return NotFound();
@@ -172,7 +167,8 @@ namespace Forum.Areas.Admin.Controllers
             if (id == null)
                 return NotFound();
 
-            var categoryFromDB = await _unitOfWork.Category.GetByIdAsync(id.Value);
+            var categoryFromDB = await _unitOfWork.Category
+                .GetByIdAsync(id.Value);
 
             if (categoryFromDB == null)
                 return NotFound();
@@ -182,11 +178,10 @@ namespace Forum.Areas.Admin.Controllers
             var imgToDel = Path.Combine(webRootPath, categoryFromDB.Image.TrimStart('\\'));
 
             if (System.IO.File.Exists(imgToDel))
-            {
                 System.IO.File.Delete(imgToDel);
-            }
 
-            var topicsFromCategory = await _unitOfWork.Topic.GetAllAsync(m => m.CategoryId == categoryFromDB.Id);
+            var topicsFromCategory = await _unitOfWork.Topic
+                .GetAllAsync(m => m.CategoryId == categoryFromDB.Id);
 
             if (topicsFromCategory != null)
                 _unitOfWork.Topic.RemoveRange(topicsFromCategory);
